@@ -26,7 +26,7 @@ export function DashboardPreview() {
               Live
             </span>
             <p className="absolute bottom-2 left-2.5 text-[10px] font-semibold text-white">
-              Vega 150
+              Bellandur 250
               <span className="block font-normal text-white/55">
                 Bengaluru, Karnataka
               </span>

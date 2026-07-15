@@ -2,7 +2,6 @@ import { Leaf } from "lucide-react";
 import { Hero } from "@/components/marketing/hero";
 import { StatsBar } from "@/components/marketing/stats-bar";
 import { ValueProps } from "@/components/marketing/value-props";
-import { TrustLogos } from "@/components/marketing/trust-logos";
 import { CtaBanner } from "@/components/marketing/cta-banner";
 import { ComparisonSection } from "@/components/marketing/comparison-section";
 import { ScrollSteps } from "@/components/marketing/scroll-steps";
@@ -65,7 +64,6 @@ export default async function HomePage() {
       <Reveal>
         <ComparisonSection />
       </Reveal>
-      <TrustLogos />
       <Reveal>
         <CtaBanner />
       </Reveal>

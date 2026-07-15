@@ -23,7 +23,7 @@ export function getProjectTint(id: string): ProjectTint {
   return TINTS[hash % TINTS.length];
 }
 
-// "Vega 150" -> "V.150", "Helios 80" -> "H.80"
+// "Bellandur 250" -> "B.250", "Kalyan 80" -> "K.80"
 export function getProjectCode(name: string): string {
   const match = name.match(/^(\S)\S*\s+(\d+)/);
   if (match) return `${match[1].toUpperCase()}.${match[2]}`;

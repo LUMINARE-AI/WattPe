@@ -110,10 +110,10 @@ async function main() {
 
   const project = await prisma.project.upsert({
     where: { slug: "vega-150" },
-    update: {},
+    update: { name: "Bellandur 250" },
     create: {
       slug: "vega-150",
-      name: "Vega 150",
+      name: "Bellandur 250",
       state: "Karnataka",
       discom: "BESCOM",
       capacityKW: 250,
@@ -127,10 +127,10 @@ async function main() {
 
   await prisma.project.upsert({
     where: { slug: "helios-80" },
-    update: {},
+    update: { name: "Kalyan 80" },
     create: {
       slug: "helios-80",
-      name: "Helios 80",
+      name: "Kalyan 80",
       state: "Maharashtra",
       discom: "Adani Electricity Mumbai",
       capacityKW: 80,
@@ -141,7 +141,7 @@ async function main() {
     },
   });
 
-  // ---- Demo reservation: Arjun on Growth-15 at Vega 150, started 12 months ago ----
+  // ---- Demo reservation: Arjun on Growth-15 at Bellandur 250, started 12 months ago ----
   const growth15 = DEF_PLANS[0];
   const dbPlan = await prisma.plan.findUniqueOrThrow({ where: { code: growth15.code } });
   const assumptions = toEngineAssumptions(DEF_ASSUMPTIONS);
