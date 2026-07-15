@@ -1,0 +1,245 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  ADMIN
+  FINANCE
+}
+
+enum KycStatus {
+  NOT_STARTED
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum ProjectStatus {
+  UPCOMING
+  ACTIVE
+  FULL
+  CLOSED
+}
+
+enum ReservationStatus {
+  PENDING_PAYMENT
+  ACTIVE
+  CLOSED
+  CANCELLED
+}
+
+enum PaymentType {
+  RESERVATION_FEE
+  REFUND
+  OTHER
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCEEDED
+  FAILED
+  REFUNDED
+}
+
+enum ReadingSource {
+  SEEDED
+  MANUAL
+  INVERTER_API
+}
+
+enum OffsetStatus {
+  PENDING
+  APPLIED
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  passwordHash  String
+  phone         String?
+  role          Role      @default(USER)
+  kycStatus     KycStatus @default(NOT_STARTED)
+  emailVerified DateTime?
+  image         String?
+
+  reservations Reservation[]
+  payments     Payment[]
+  creditLedger CreditLedgerEntry[]
+  accounts     Account[]
+  sessions     Session[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Project {
+  id               String    @id @default(cuid())
+  slug             String    @unique
+  name             String
+  state            String
+  discom           String?
+  capacityKW       Decimal
+  operationalUntil DateTime
+  commissionedAt   DateTime?
+  status           ProjectStatus @default(ACTIVE)
+  heroImage        String?
+  description      String?
+
+  reservations       Reservation[]
+  generationReadings GenerationReading[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Plan {
+  id                String  @id @default(cuid())
+  code              String  @unique
+  name              String
+  tenureYears       Int
+  creditRatePerUnit Decimal
+  targetXirrPct     Decimal
+  refundPct         Decimal @default(0)
+  mixPct            Decimal
+  autoResell        Boolean @default(false)
+  isActive          Boolean @default(true)
+
+  reservations Reservation[]
+
+  updatedAt DateTime @updatedAt
+}
+
+model PricingAssumption {
+  id                    String   @id @default("default")
+  genUnitsPerKwDay      Decimal
+  promisedUnitsPerKwDay Decimal
+  degradationPct        Decimal
+  stepEveryYears        Int
+  userStepPct           Decimal
+  onboardingFeePct      Decimal
+  updatedAt             DateTime @updatedAt
+}
+
+model SupportedDiscom {
+  id       String  @id @default(cuid())
+  name     String
+  state    String
+  isActive Boolean @default(true)
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  message   String
+  createdAt DateTime @default(now())
+}
+
+model Reservation {
+  id             String            @id @default(cuid())
+  userId         String
+  user           User              @relation(fields: [userId], references: [id])
+  projectId      String
+  project        Project           @relation(fields: [projectId], references: [id])
+  planId         String
+  plan           Plan              @relation(fields: [planId], references: [id])
+  capacityKW     Decimal
+  feePerKW       Decimal
+  reservationFee Decimal
+  status         ReservationStatus @default(PENDING_PAYMENT)
+  startDate      DateTime?
+  tenureEndsAt   DateTime?
+
+  payments     Payment[]
+  creditLedger CreditLedgerEntry[]
+
+  createdAt DateTime @default(now())
+}
+
+model Payment {
+  id            String        @id @default(cuid())
+  reservationId String
+  reservation   Reservation   @relation(fields: [reservationId], references: [id])
+  userId        String
+  user          User          @relation(fields: [userId], references: [id])
+  amount        Decimal
+  currency      String        @default("INR")
+  type          PaymentType
+  status        PaymentStatus @default(PENDING)
+  provider      String?
+  providerRef   String?
+
+  createdAt DateTime @default(now())
+}
+
+model GenerationReading {
+  id           String        @id @default(cuid())
+  projectId    String
+  project      Project       @relation(fields: [projectId], references: [id])
+  readingDate  DateTime
+  kwhGenerated Decimal
+  source       ReadingSource @default(SEEDED)
+
+  createdAt DateTime @default(now())
+
+  @@unique([projectId, readingDate])
+}
+
+model CreditLedgerEntry {
+  id                String       @id @default(cuid())
+  reservationId     String
+  reservation       Reservation  @relation(fields: [reservationId], references: [id])
+  userId            String
+  user              User         @relation(fields: [userId], references: [id])
+  periodStart       DateTime
+  unitsAllocated    Decimal
+  creditRatePerUnit Decimal
+  creditAmount      Decimal
+  gridTariffAssumed Decimal
+  savingsAmount     Decimal
+  offsetStatus      OffsetStatus @default(APPLIED)
+
+  createdAt DateTime @default(now())
+}

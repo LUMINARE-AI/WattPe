@@ -1,0 +1,199 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-heading);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-brand-green: var(--brand-green);
+  --color-brand-green-hover: var(--brand-green-hover);
+  --color-brand-leaf: var(--brand-leaf);
+  --color-brand-sun: var(--brand-sun);
+  --color-brand-sun-hover: var(--brand-sun-hover);
+  --color-brand-ink: var(--brand-ink);
+  --color-brand-void: var(--brand-void);
+  --color-brand-paper: var(--brand-paper);
+  --color-brand-amber: var(--brand-amber);
+  --color-brand-amber-hover: var(--brand-amber-hover);
+  --color-brand-amber-light: var(--brand-amber-light);
+  --color-brand-espresso: var(--brand-espresso);
+  --color-brand-espresso-deep: var(--brand-espresso-deep);
+  --color-brand-teal: var(--brand-teal);
+  --color-brand-teal-light: var(--brand-teal-light);
+  --color-brand-navy-light: var(--brand-navy-light);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  /* WattPe brand tokens — "Sunrise Energy" theme: coral-amber is the single
+     accent for CTAs/links/active-states, indigo-navy is the dark surface,
+     warm off-white is the base, and muted teal is reserved for actual
+     positive numbers (savings/credits) rather than being a second brand
+     color. brand-green/leaf/sun are kept as aliases (repointed to the coral
+     family) so every existing className cascades without a full rename.
+     brand-void/brand-ink both resolve to the same navy. */
+  --brand-navy: #1e2749;
+  --brand-navy-light: #2e3a63;
+  --brand-green: #f5793a;
+  --brand-green-hover: #dd6529;
+  --brand-leaf: #ffa36c;
+  --brand-sun: #ff8f52;
+  --brand-sun-hover: #dd6529;
+  --brand-teal: #0f9d74;
+  --brand-teal-light: #34bfa0;
+  --brand-ink: var(--brand-navy);
+  --brand-void: var(--brand-navy);
+  --brand-paper: #fdfbf7;
+
+  /* Scoped accent palette for project cards + the savings calculator only —
+     amber/espresso instead of the site's green/navy, per the "map-tinted
+     energy grid" restyle. Not used as the global --primary/--secondary. */
+  --brand-amber: #c2760c;
+  --brand-amber-hover: #a8630a;
+  --brand-amber-light: #f0b85e;
+  --brand-espresso: #2b1d14;
+  --brand-espresso-deep: #1f150f;
+  --tint-terracotta-bg: #f5e1d2;
+  --tint-terracotta-line: #c97b4a;
+  --tint-terracotta-avatar: #e3a57c;
+  --tint-sage-bg: #e7ebda;
+  --tint-sage-line: #7c9459;
+  --tint-sage-avatar: #aabe85;
+  --tint-teal-bg: #dceae7;
+  --tint-teal-line: #3e7a72;
+  --tint-teal-avatar: #7fada5;
+  --tint-marigold-bg: #faedc9;
+  --tint-marigold-line: #c99a2e;
+  --tint-marigold-avatar: #e8c369;
+  --tint-clayrose-bg: #f6dcd6;
+  --tint-clayrose-line: #c17164;
+  --tint-clayrose-avatar: #e0a294;
+
+  --background: var(--brand-paper);
+  --foreground: var(--brand-ink);
+  --card: #ffffff;
+  --card-foreground: var(--brand-ink);
+  --popover: #ffffff;
+  --popover-foreground: var(--brand-ink);
+  --primary: var(--brand-green);
+  --primary-foreground: #ffffff;
+  --secondary: var(--brand-navy);
+  --secondary-foreground: #ffffff;
+  --muted: #f0eee6;
+  --muted-foreground: #5b6472;
+  --accent: #fdece1;
+  --accent-foreground: var(--brand-green-hover);
+  --destructive: #c0362c;
+  --border: #e4e1d5;
+  --input: #e4e1d5;
+  --ring: var(--brand-green);
+  --chart-1: var(--brand-green);
+  --chart-2: var(--brand-navy);
+  --chart-3: var(--brand-teal);
+  --chart-4: #3a8fa8;
+  --chart-5: var(--brand-navy);
+  --radius: 0.875rem;
+  --sidebar: #ffffff;
+  --sidebar-foreground: var(--brand-ink);
+  --sidebar-primary: var(--brand-green);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #fdece1;
+  --sidebar-accent-foreground: var(--brand-green-hover);
+  --sidebar-border: #e4e1d5;
+  --sidebar-ring: var(--brand-green);
+}
+
+.dark {
+  --background: #0e141f;
+  --foreground: var(--brand-paper);
+  --card: #161d29;
+  --card-foreground: var(--brand-paper);
+  --popover: #161d29;
+  --popover-foreground: var(--brand-paper);
+  --primary: var(--brand-leaf);
+  --primary-foreground: #0e141f;
+  --secondary: #2a3648;
+  --secondary-foreground: var(--brand-paper);
+  --muted: #1b2330;
+  --muted-foreground: #8b94a3;
+  --accent: #3a2418;
+  --accent-foreground: var(--brand-leaf);
+  --destructive: #e5645a;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.15);
+  --ring: var(--brand-leaf);
+  --chart-1: var(--brand-leaf);
+  --chart-2: #7c8aa3;
+  --chart-3: var(--brand-teal-light);
+  --chart-4: #5cb8d1;
+  --chart-5: var(--brand-paper);
+  --sidebar: #161d29;
+  --sidebar-foreground: var(--brand-paper);
+  --sidebar-primary: var(--brand-leaf);
+  --sidebar-primary-foreground: #0e141f;
+  --sidebar-accent: #3a2418;
+  --sidebar-accent-foreground: var(--brand-leaf);
+  --sidebar-border: rgba(255, 255, 255, 0.1);
+  --sidebar-ring: var(--brand-leaf);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading;
+  }
+}
