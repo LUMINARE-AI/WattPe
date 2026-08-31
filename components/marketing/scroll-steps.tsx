@@ -35,8 +35,8 @@ const STEPS = [
 
 const TONE_TEXT = {
   coral: "text-brand-green",
-  navy: "text-brand-void",
-  teal: "text-brand-teal",
+  navy: "text-brand-cyan",
+  teal: "text-brand-sun",
 };
 
 export function ScrollSteps() {
@@ -163,13 +163,13 @@ function MockFrame({
 }) {
   const accentBg = {
     coral: "bg-brand-green/10",
-    navy: "bg-brand-void/10",
-    teal: "bg-brand-teal/15",
+    navy: "bg-brand-cyan/10",
+    teal: "bg-brand-sun/15",
   }[accent];
 
   return (
     <div className={cn("h-full rounded-[28px] p-3", accentBg)}>
-      <div className="border-border h-full overflow-hidden rounded-3xl border bg-white shadow-[0_1px_2px_rgba(30,39,73,0.05),0_24px_60px_rgba(30,39,73,0.12)]">
+      <div className="border-border h-full overflow-hidden rounded-3xl border bg-white shadow-[0_1px_2px_rgba(15,31,31,0.05),0_24px_60px_rgba(15,31,31,0.12)]">
         {children}
       </div>
     </div>
@@ -237,14 +237,14 @@ function ChooseUtilityMock() {
   return (
     <MockFrame accent="navy">
       <div className="p-6">
-        <h4 className="text-brand-void font-heading text-lg font-bold">
+        <h4 className="text-brand-cyan font-heading text-lg font-bold">
           Choose your utility
         </h4>
 
         <p className="text-muted-foreground mt-5 mb-1.5 text-xs">Utility Provider</p>
         <div className="border-border flex items-center justify-between rounded-xl border p-3">
           <div className="flex items-center gap-2.5">
-            <span className="bg-brand-void/10 flex size-8 items-center justify-center rounded-full text-xs">
+            <span className="bg-brand-cyan/10 flex size-8 items-center justify-center rounded-full text-xs">
               ⚡
             </span>
             <span className="text-sm font-bold">BESCOM</span>
@@ -260,7 +260,7 @@ function ChooseUtilityMock() {
 
         <p className="text-muted-foreground mt-5 mb-2 text-xs">Save Bill As</p>
         <div className="flex flex-wrap gap-2">
-          <span className="bg-brand-void inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium text-white">
+          <span className="bg-brand-cyan inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium text-white">
             <Home className="size-3" /> My Flat
           </span>
           <span className="bg-muted inline-flex items-center rounded-full px-3 py-1.5 text-xs font-medium">
@@ -282,11 +282,11 @@ function PayBillMock() {
   return (
     <MockFrame accent="teal">
       <div className="p-6">
-        <h4 className="text-brand-teal font-heading text-lg font-bold">
+        <h4 className="text-brand-sun font-heading text-lg font-bold">
           Pay monthly bill
         </h4>
 
-        <div className="bg-brand-teal/10 border-brand-teal/25 mt-4 flex items-center justify-between rounded-xl border p-3">
+        <div className="bg-brand-sun/10 border-brand-sun/25 mt-4 flex items-center justify-between rounded-xl border p-3">
           <div>
             <p className="text-sm font-semibold">My Flat</p>
             <p className="text-muted-foreground text-xs">6405601234</p>
@@ -302,7 +302,7 @@ function PayBillMock() {
             <p className="text-muted-foreground text-xs">You Paid</p>
             <p className="text-2xl font-bold">₹825</p>
           </div>
-          <CheckCircle2 className="text-brand-teal size-9" />
+          <CheckCircle2 className="text-brand-sun size-9" />
         </div>
 
         <div className="border-border mt-5 space-y-2 border-t pt-4 text-sm">
@@ -316,7 +316,7 @@ function PayBillMock() {
           </div>
         </div>
 
-        <div className="bg-brand-teal/10 mt-4 rounded-xl p-3 text-center text-sm font-semibold">
+        <div className="bg-brand-sun/10 mt-4 rounded-xl p-3 text-center text-sm font-semibold">
           43% saved on this bill
         </div>
         <p className="text-muted-foreground mt-3 text-center text-xs">

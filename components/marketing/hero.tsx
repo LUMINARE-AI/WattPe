@@ -20,7 +20,7 @@ export function Hero() {
           <circle cx="450" cy="450" r="320" />
           <circle cx="450" cy="450" r="420" />
         </g>
-        <g stroke="var(--brand-teal)" strokeWidth="1" opacity="0.25">
+        <g stroke="var(--brand-cyan)" strokeWidth="1" opacity="0.25">
           <line x1="450" y1="450" x2="900" y2="120" />
           <line x1="450" y1="450" x2="900" y2="450" />
           <line x1="450" y1="450" x2="900" y2="780" />
@@ -38,7 +38,7 @@ export function Hero() {
           <h1 className="mt-6 max-w-xl text-4xl leading-[0.98] font-extrabold tracking-tight text-balance text-white sm:text-6xl">
             Solar,
             <br />
-            <span className="text-transparent [-webkit-text-stroke:1.5px_var(--brand-green)]">
+            <span className="text-gradient-brand">
               beyond
             </span>{" "}
             rooftops.
@@ -52,7 +52,7 @@ export function Hero() {
           <div className="mt-10 flex flex-wrap items-center gap-4">
             <Button
               size="lg"
-              className="bg-brand-green hover:bg-brand-green-hover shadow-brand-green/25 h-11 rounded-full px-6 text-white shadow-lg"
+              className="bg-gradient-brand hover:opacity-90 shadow-brand-green/25 h-11 rounded-full px-6 text-white shadow-lg"
               render={<Link href="/projects" />}
             >
               Reserve your capacity <ArrowRight className="size-4" />
@@ -73,7 +73,7 @@ export function Hero() {
                 <span
                   key={letter}
                   style={{ marginLeft: i === 0 ? 0 : "-8px" }}
-                  className="border-brand-void from-brand-green to-brand-teal flex size-7 items-center justify-center rounded-full border-2 bg-gradient-to-br text-[10px] font-bold text-white"
+                  className="border-brand-void from-brand-green to-brand-cyan flex size-7 items-center justify-center rounded-full border-2 bg-gradient-to-br text-[10px] font-bold text-white"
                 >
                   {letter}
                 </span>

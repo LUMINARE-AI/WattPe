@@ -175,8 +175,8 @@ function FlowNode({
 }) {
   const ring = {
     coral: "ring-brand-green/40 bg-brand-green/5",
-    navy: "ring-brand-void/30 bg-brand-void/5",
-    teal: "ring-brand-teal/40 bg-brand-teal/5",
+    navy: "ring-brand-cyan/40 bg-brand-cyan/5",
+    teal: "ring-brand-sun/40 bg-brand-sun/5",
   }[tone];
 
   return (

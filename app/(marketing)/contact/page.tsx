@@ -26,7 +26,7 @@ export default function ContactPage() {
               </span>
               <div>
                 <p className="font-medium">Email</p>
-                <p className="text-muted-foreground text-sm">hello@wattpe.com</p>
+                <p className="text-muted-foreground text-sm">contact@wattpe.com</p>
               </div>
             </div>
             <div className="border-border bg-card flex items-start gap-3 rounded-2xl border p-5 shadow-[0_1px_2px_rgba(16,23,42,0.04),0_8px_24px_rgba(16,23,42,0.06)]">

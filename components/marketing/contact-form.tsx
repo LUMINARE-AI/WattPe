@@ -1,33 +1,48 @@
 "use client";
 
-import { useActionState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { contactAction, type ActionState } from "@/lib/actions/contact";
+
+const WHATSAPP_NUMBER = "919887270041";
+
+function buildWhatsAppUrl(name: string, email: string, message: string) {
+  const text = `Hi, I'm ${name} (${email}).\n\n${message}`;
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+}
 
 export function ContactForm() {
-  const [state, formAction, pending] = useActionState<ActionState, FormData>(
-    contactAction,
-    {},
-  );
+  const [error, setError] = useState<string | null>(null);
 
-  if (state.success) {
-    return (
-      <div className="border-border bg-card rounded-2xl border p-8 text-center">
-        <h3 className="font-heading text-lg font-semibold">
-          Message sent
-        </h3>
-        <p className="text-muted-foreground mt-2 text-sm">
-          Thanks for reaching out — our team will get back to you shortly.
-        </p>
-      </div>
-    );
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setError(null);
+
+    const formData = new FormData(event.currentTarget);
+    const name = String(formData.get("name") ?? "").trim();
+    const email = String(formData.get("email") ?? "").trim();
+    const message = String(formData.get("message") ?? "").trim();
+
+    if (name.length < 2) {
+      setError("Enter your name.");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError("Enter a valid email address.");
+      return;
+    }
+    if (message.length < 10) {
+      setError("Tell us a bit more (at least 10 characters).");
+      return;
+    }
+
+    window.location.href = buildWhatsAppUrl(name, email, message);
   }
 
   return (
-    <form action={formAction} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-1.5">
         <Label htmlFor="name">Name</Label>
         <Input id="name" name="name" autoComplete="name" required />
@@ -41,10 +56,10 @@ export function ContactForm() {
         <Textarea id="message" name="message" rows={5} required />
       </div>
 
-      {state.error && <p className="text-destructive text-sm">{state.error}</p>}
+      {error && <p className="text-destructive text-sm">{error}</p>}
 
-      <Button type="submit" disabled={pending} className="w-full sm:w-auto">
-        {pending ? "Sending…" : "Send message"}
+      <Button type="submit" className="w-full sm:w-auto">
+        Send message
       </Button>
     </form>
   );

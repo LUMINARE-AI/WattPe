@@ -42,7 +42,7 @@ export function SavingsCalculator({
       ?.cumulativeSavings ?? 0;
 
   return (
-    <div className="bg-brand-paper border-border relative overflow-hidden rounded-3xl border p-6 shadow-[0_1px_2px_rgba(30,39,73,0.05),0_20px_50px_rgba(30,39,73,0.08)] sm:p-8">
+    <div className="bg-brand-paper border-border relative overflow-hidden rounded-3xl border p-6 shadow-[0_1px_2px_rgba(15,31,31,0.05),0_20px_50px_rgba(15,31,31,0.08)] sm:p-8">
       <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
         <div>
           <p className="text-brand-green font-mono text-xs font-semibold tracking-wide uppercase">
@@ -121,7 +121,7 @@ export function SavingsCalculator({
             />
           </div>
 
-          <div className="border-border bg-card mt-3 flex flex-wrap items-center justify-between gap-2 rounded-2xl border p-4 text-sm shadow-[0_1px_2px_rgba(30,39,73,0.04)]">
+          <div className="border-border bg-card mt-3 flex flex-wrap items-center justify-between gap-2 rounded-2xl border p-4 text-sm shadow-[0_1px_2px_rgba(15,31,31,0.04)]">
             <span className="text-muted-foreground">
               {plan.tenureYears}-year cumulative savings
             </span>
@@ -130,7 +130,7 @@ export function SavingsCalculator({
             </span>
           </div>
 
-          <div className="border-border bg-card mt-3 flex flex-wrap items-center justify-between gap-2 rounded-2xl border p-4 text-sm shadow-[0_1px_2px_rgba(30,39,73,0.04)]">
+          <div className="border-border bg-card mt-3 flex flex-wrap items-center justify-between gap-2 rounded-2xl border p-4 text-sm shadow-[0_1px_2px_rgba(15,31,31,0.04)]">
             <span className="text-muted-foreground">
               One-time reservation fee
             </span>
@@ -166,7 +166,7 @@ function Stat({
   isSavingsFigure?: boolean;
 }) {
   return (
-    <div className="border-border bg-card rounded-2xl border p-4 shadow-[0_1px_2px_rgba(30,39,73,0.04),0_6px_16px_rgba(30,39,73,0.05)]">
+    <div className="border-border bg-card rounded-2xl border p-4 shadow-[0_1px_2px_rgba(15,31,31,0.04),0_6px_16px_rgba(15,31,31,0.05)]">
       <div
         className={cn(
           "mb-2.5 flex size-7 items-center justify-center rounded-lg",

@@ -17,18 +17,18 @@ export default function AuthLayout({
     <div className="bg-brand-void flex min-h-svh flex-col lg:flex-row">
       <div
         aria-hidden
-        className="bg-brand-sun/15 pointer-events-none fixed top-[-15%] right-[-10%] size-[480px] rounded-full blur-3xl"
+        className="bg-brand-green/15 pointer-events-none fixed top-[-15%] right-[-10%] size-[480px] rounded-full blur-3xl"
       />
       <div
         aria-hidden
-        className="bg-brand-leaf/10 pointer-events-none fixed bottom-[-20%] left-[-10%] size-[420px] rounded-full blur-3xl"
+        className="bg-brand-cyan/10 pointer-events-none fixed bottom-[-20%] left-[-10%] size-[420px] rounded-full blur-3xl"
       />
 
       {/* Form side */}
       <div className="relative flex flex-1 flex-col">
         <header className="relative p-6">
           <Link href="/">
-            <Logo className="text-white" />
+            <Logo onDark />
           </Link>
         </header>
         <main className="relative flex flex-1 items-center justify-center px-6 pb-16">
@@ -37,14 +37,14 @@ export default function AuthLayout({
       </div>
 
       {/* Impact panel */}
-      <div className="from-brand-green via-brand-green to-brand-green-hover relative hidden w-full max-w-md flex-col justify-center overflow-hidden bg-gradient-to-br px-10 py-16 lg:flex">
+      <div className="from-brand-green via-brand-cyan to-brand-void relative hidden w-full max-w-md flex-col justify-center overflow-hidden bg-gradient-to-br px-10 py-16 lg:flex">
         <div
           aria-hidden
           className="bg-brand-leaf/20 pointer-events-none absolute top-[-10%] right-[-20%] size-72 rounded-full blur-3xl"
         />
         <div
           aria-hidden
-          className="bg-brand-sun/20 pointer-events-none absolute bottom-[-15%] left-[-15%] size-64 rounded-full blur-3xl"
+          className="bg-brand-sun/25 pointer-events-none absolute bottom-[-15%] left-[-15%] size-64 rounded-full blur-3xl"
         />
         <div className="relative">
           <p className="text-brand-sun text-xs font-semibold tracking-wide uppercase">

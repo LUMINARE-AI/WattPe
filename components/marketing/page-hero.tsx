@@ -13,11 +13,15 @@ export function PageHero({
     <section className="bg-brand-void relative overflow-hidden">
       <div
         aria-hidden
-        className="bg-brand-sun/15 pointer-events-none absolute top-[-30%] right-[-10%] size-[420px] rounded-full blur-3xl"
+        className="bg-brand-green/20 pointer-events-none absolute top-[-30%] right-[-10%] size-[420px] rounded-full blur-3xl"
       />
       <div
         aria-hidden
-        className="bg-brand-leaf/10 pointer-events-none absolute bottom-[-40%] left-[-5%] size-[360px] rounded-full blur-3xl"
+        className="bg-brand-cyan/15 pointer-events-none absolute bottom-[-40%] left-[-5%] size-[360px] rounded-full blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="bg-brand-sun/10 pointer-events-none absolute top-[20%] left-[30%] size-[280px] rounded-full blur-3xl"
       />
       <Container className="relative py-20 sm:py-28">
         {eyebrow && (

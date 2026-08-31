@@ -15,7 +15,7 @@ export default async function OpengraphImage() {
           justifyContent: "center",
           padding: 80,
           background:
-            "radial-gradient(circle at 80% 20%, rgba(245,165,36,0.35), transparent 55%), #12100D",
+            "linear-gradient(135deg, rgba(114,176,24,0.25) 0%, rgba(0,136,152,0.2) 45%, transparent 70%), radial-gradient(circle at 85% 15%, rgba(251,176,36,0.3), transparent 50%), #0F1F1F",
         }}
       >
         <div
@@ -25,7 +25,7 @@ export default async function OpengraphImage() {
             gap: 16,
             fontSize: 44,
             fontWeight: 700,
-            color: "#FBF9F6",
+            color: "#F7FAFC",
           }}
         >
           <div
@@ -34,10 +34,19 @@ export default async function OpengraphImage() {
               width: 56,
               height: 56,
               borderRadius: 999,
-              background: "#F5A524",
+              background: "linear-gradient(135deg, #72B018 0%, #008898 100%)",
             }}
           />
-          Watt<span style={{ color: "#F5A524" }}>Pe</span>
+          Watt
+          <span
+            style={{
+              background: "linear-gradient(135deg, #72B018 0%, #008898 100%)",
+              backgroundClip: "text",
+              color: "transparent",
+            }}
+          >
+            Pe
+          </span>
         </div>
         <div
           style={{
@@ -45,7 +54,7 @@ export default async function OpengraphImage() {
             marginTop: 32,
             fontSize: 64,
             fontWeight: 700,
-            color: "#FBF9F6",
+            color: "#F7FAFC",
             maxWidth: 900,
           }}
         >
@@ -56,7 +65,7 @@ export default async function OpengraphImage() {
             display: "flex",
             marginTop: 20,
             fontSize: 28,
-            color: "rgba(251,249,246,0.7)",
+            color: "rgba(247,250,252,0.7)",
             maxWidth: 800,
           }}
         >

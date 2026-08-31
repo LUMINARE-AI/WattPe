@@ -3,8 +3,8 @@
 // device frame can wrap a real screenshot without further layout changes.
 const DISCOMS = [
   { code: "BES", label: "BESCOM", color: "var(--brand-green)" },
-  { code: "MSE", label: "MSEDCL", color: "var(--brand-navy-light)" },
-  { code: "AEM", label: "Adani Mumbai", color: "var(--brand-teal)" },
+  { code: "MSE", label: "MSEDCL", color: "var(--brand-cyan)" },
+  { code: "AEM", label: "Adani Mumbai", color: "var(--brand-sun)" },
 ];
 
 export function DashboardPreview() {
@@ -13,15 +13,15 @@ export function DashboardPreview() {
   return (
     <div className="relative mx-auto w-full max-w-sm">
       <div className="[transform:rotate(-6deg)]">
-        <div className="rounded-2xl border border-white/10 bg-[#0f1730] p-4 shadow-[0_40px_90px_rgba(0,0,0,0.5)] sm:p-5">
+        <div className="bg-brand-void rounded-2xl border border-white/10 p-4 shadow-[0_40px_90px_rgba(0,0,0,0.5)] sm:p-5">
           <div className="mb-3.5 flex items-center justify-between">
             <span className="text-xs font-semibold tracking-wide text-white uppercase">
               WattPe Dashboard
             </span>
-            <span className="bg-brand-green size-2 rounded-full shadow-[0_0_0_3px_rgba(245,121,58,0.3)]" />
+            <span className="bg-brand-green size-2 rounded-full shadow-[0_0_0_3px_rgba(114,176,24,0.35)]" />
           </div>
 
-          <div className="from-brand-green/20 to-brand-teal/15 relative mb-3 h-[104px] overflow-hidden rounded-xl bg-gradient-to-br">
+          <div className="from-brand-green/20 to-brand-cyan/15 relative mb-3 h-[104px] overflow-hidden rounded-xl bg-gradient-to-br">
             <span className="absolute top-2 right-2 rounded-full bg-white/15 px-2 py-0.5 text-[9px] text-white">
               Live
             </span>
@@ -42,7 +42,7 @@ export function DashboardPreview() {
                 Saved this month
               </p>
             </div>
-            <div className="border-brand-teal/40 bg-brand-teal/15 rounded-lg border p-2.5">
+            <div className="border-brand-cyan/40 bg-brand-cyan/15 rounded-lg border p-2.5">
               <p className="font-mono text-base font-bold text-white">
                 312 kWh
               </p>
@@ -56,7 +56,7 @@ export function DashboardPreview() {
             {bars.map((height, i) => (
               <div
                 key={i}
-                className="from-brand-green-hover to-brand-green flex-1 rounded-sm bg-gradient-to-t"
+                className="from-brand-green-hover to-brand-cyan flex-1 rounded-sm bg-gradient-to-t"
                 style={{ height: `${height}%` }}
               />
             ))}
@@ -88,8 +88,8 @@ export function DashboardPreview() {
         </div>
       </div>
 
-      <div className="border-brand-teal/25 absolute -right-[12%] bottom-[26%] hidden items-center gap-2 rounded-2xl border bg-white px-3.5 py-2.5 shadow-[0_16px_40px_rgba(0,0,0,0.2)] sm:flex">
-        <span className="bg-brand-teal/15 flex size-7 items-center justify-center rounded-lg text-sm">
+      <div className="border-brand-cyan/25 absolute -right-[12%] bottom-[26%] hidden items-center gap-2 rounded-2xl border bg-white px-3.5 py-2.5 shadow-[0_16px_40px_rgba(0,0,0,0.2)] sm:flex">
+        <span className="bg-brand-cyan/15 flex size-7 items-center justify-center rounded-lg text-sm">
           📈
         </span>
         <div>

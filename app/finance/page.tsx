@@ -55,7 +55,7 @@ export default function FinanceHomePage() {
       <header className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <div className="bg-accent flex size-10 items-center justify-center rounded-full">
-            <LineChart className="text-brand-gold-hover size-5" />
+            <LineChart className="text-brand-sun-hover size-5" />
           </div>
           <div>
             <h1 className="font-heading text-xl font-semibold">Business Studio</h1>

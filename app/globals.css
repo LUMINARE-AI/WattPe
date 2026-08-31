@@ -43,6 +43,8 @@
   --color-brand-green: var(--brand-green);
   --color-brand-green-hover: var(--brand-green-hover);
   --color-brand-leaf: var(--brand-leaf);
+  --color-brand-cyan: var(--brand-cyan);
+  --color-brand-cyan-deep: var(--brand-cyan-deep);
   --color-brand-sun: var(--brand-sun);
   --color-brand-sun-hover: var(--brand-sun-hover);
   --color-brand-ink: var(--brand-ink);
@@ -66,49 +68,58 @@
 }
 
 :root {
-  /* WattPe brand tokens — "Sunrise Energy" theme: coral-amber is the single
-     accent for CTAs/links/active-states, indigo-navy is the dark surface,
-     warm off-white is the base, and muted teal is reserved for actual
-     positive numbers (savings/credits) rather than being a second brand
-     color. brand-green/leaf/sun are kept as aliases (repointed to the coral
-     family) so every existing className cascades without a full rename.
-     brand-void/brand-ink both resolve to the same navy. */
-  --brand-navy: #1e2749;
-  --brand-navy-light: #2e3a63;
-  --brand-green: #f5793a;
-  --brand-green-hover: #dd6529;
-  --brand-leaf: #ffa36c;
-  --brand-sun: #ff8f52;
-  --brand-sun-hover: #dd6529;
-  --brand-teal: #0f9d74;
-  --brand-teal-light: #34bfa0;
-  --brand-ink: var(--brand-navy);
-  --brand-void: var(--brand-navy);
-  --brand-paper: #fdfbf7;
+  /* WattPe brand tokens — "Community Energy" theme: lime green + cyan from the
+     logo wordmark, yellow-orange for highlights/CTAs, dark teal slate for text
+     and dark surfaces, cool off-white base. brand-green/leaf/sun aliases are
+     kept so existing classNames cascade without a full rename. */
+  --brand-green: #72b018;
+  --brand-green-hover: #5a9010;
+  --brand-leaf: #4dd4e8;
+  --brand-cyan: #008898;
+  --brand-cyan-deep: #0078a0;
+  --brand-sun: #fbb024;
+  --brand-sun-hover: #f59e0b;
+  --brand-teal: #14b8a6;
+  --brand-teal-light: #2dd4bf;
+  --brand-navy: #1a3333;
+  --brand-navy-light: #234848;
+  --brand-ink: #1a3333;
+  --brand-void: #0f1f1f;
+  --brand-paper: #f7fafc;
 
-  /* Scoped accent palette for project cards + the savings calculator only —
-     amber/espresso instead of the site's green/navy, per the "map-tinted
-     energy grid" restyle. Not used as the global --primary/--secondary. */
-  --brand-amber: #c2760c;
-  --brand-amber-hover: #a8630a;
-  --brand-amber-light: #f0b85e;
-  --brand-espresso: #2b1d14;
-  --brand-espresso-deep: #1f150f;
-  --tint-terracotta-bg: #f5e1d2;
-  --tint-terracotta-line: #c97b4a;
-  --tint-terracotta-avatar: #e3a57c;
-  --tint-sage-bg: #e7ebda;
-  --tint-sage-line: #7c9459;
-  --tint-sage-avatar: #aabe85;
-  --tint-teal-bg: #dceae7;
-  --tint-teal-line: #3e7a72;
-  --tint-teal-avatar: #7fada5;
-  --tint-marigold-bg: #faedc9;
-  --tint-marigold-line: #c99a2e;
-  --tint-marigold-avatar: #e8c369;
-  --tint-clayrose-bg: #f6dcd6;
-  --tint-clayrose-line: #c17164;
-  --tint-clayrose-avatar: #e0a294;
+  --gradient-brand: linear-gradient(
+    135deg,
+    var(--brand-green) 0%,
+    var(--brand-cyan) 100%
+  );
+  --gradient-brand-warm: linear-gradient(
+    135deg,
+    var(--brand-green) 0%,
+    var(--brand-cyan) 55%,
+    var(--brand-sun) 100%
+  );
+
+  /* Scoped accent palette for project cards + savings calculator */
+  --brand-amber: #d97706;
+  --brand-amber-hover: #b45309;
+  --brand-amber-light: #fbbf24;
+  --brand-espresso: #0f1f1f;
+  --brand-espresso-deep: #0a1616;
+  --tint-terracotta-bg: #ecfdf5;
+  --tint-terracotta-line: #72b018;
+  --tint-terracotta-avatar: #98d020;
+  --tint-sage-bg: #ecfeff;
+  --tint-sage-line: #008898;
+  --tint-sage-avatar: #22d3ee;
+  --tint-teal-bg: #f0fdfa;
+  --tint-teal-line: #14b8a6;
+  --tint-teal-avatar: #5eead4;
+  --tint-marigold-bg: #fffbeb;
+  --tint-marigold-line: #d97706;
+  --tint-marigold-avatar: #fbbf24;
+  --tint-clayrose-bg: #f0f9ff;
+  --tint-clayrose-line: #0078a0;
+  --tint-clayrose-avatar: #38bdf8;
 
   --background: var(--brand-paper);
   --foreground: var(--brand-ink);
@@ -120,59 +131,59 @@
   --primary-foreground: #ffffff;
   --secondary: var(--brand-navy);
   --secondary-foreground: #ffffff;
-  --muted: #f0eee6;
-  --muted-foreground: #5b6472;
-  --accent: #fdece1;
+  --muted: #eef2f4;
+  --muted-foreground: #4a5c5c;
+  --accent: #ecfdf5;
   --accent-foreground: var(--brand-green-hover);
   --destructive: #c0362c;
-  --border: #e4e1d5;
-  --input: #e4e1d5;
+  --border: #dce4e4;
+  --input: #dce4e4;
   --ring: var(--brand-green);
   --chart-1: var(--brand-green);
-  --chart-2: var(--brand-navy);
-  --chart-3: var(--brand-teal);
-  --chart-4: #3a8fa8;
-  --chart-5: var(--brand-navy);
+  --chart-2: var(--brand-cyan);
+  --chart-3: var(--brand-sun);
+  --chart-4: var(--brand-navy);
+  --chart-5: var(--brand-teal);
   --radius: 0.875rem;
   --sidebar: #ffffff;
   --sidebar-foreground: var(--brand-ink);
   --sidebar-primary: var(--brand-green);
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #fdece1;
+  --sidebar-accent: #ecfdf5;
   --sidebar-accent-foreground: var(--brand-green-hover);
-  --sidebar-border: #e4e1d5;
+  --sidebar-border: #dce4e4;
   --sidebar-ring: var(--brand-green);
 }
 
 .dark {
-  --background: #0e141f;
+  --background: #0a1616;
   --foreground: var(--brand-paper);
-  --card: #161d29;
+  --card: #122020;
   --card-foreground: var(--brand-paper);
-  --popover: #161d29;
+  --popover: #122020;
   --popover-foreground: var(--brand-paper);
   --primary: var(--brand-leaf);
-  --primary-foreground: #0e141f;
-  --secondary: #2a3648;
+  --primary-foreground: #0a1616;
+  --secondary: #234848;
   --secondary-foreground: var(--brand-paper);
-  --muted: #1b2330;
-  --muted-foreground: #8b94a3;
-  --accent: #3a2418;
+  --muted: #152424;
+  --muted-foreground: #8ba3a3;
+  --accent: #0f2a2a;
   --accent-foreground: var(--brand-leaf);
   --destructive: #e5645a;
   --border: rgba(255, 255, 255, 0.1);
   --input: rgba(255, 255, 255, 0.15);
   --ring: var(--brand-leaf);
-  --chart-1: var(--brand-leaf);
-  --chart-2: #7c8aa3;
-  --chart-3: var(--brand-teal-light);
-  --chart-4: #5cb8d1;
+  --chart-1: var(--brand-green);
+  --chart-2: var(--brand-cyan);
+  --chart-3: var(--brand-sun);
+  --chart-4: var(--brand-teal-light);
   --chart-5: var(--brand-paper);
-  --sidebar: #161d29;
+  --sidebar: #122020;
   --sidebar-foreground: var(--brand-paper);
   --sidebar-primary: var(--brand-leaf);
-  --sidebar-primary-foreground: #0e141f;
-  --sidebar-accent: #3a2418;
+  --sidebar-primary-foreground: #0a1616;
+  --sidebar-accent: #0f2a2a;
   --sidebar-accent-foreground: var(--brand-leaf);
   --sidebar-border: rgba(255, 255, 255, 0.1);
   --sidebar-ring: var(--brand-leaf);
@@ -195,5 +206,20 @@
   h5,
   h6 {
     @apply font-heading;
+  }
+}
+
+@layer utilities {
+  .bg-gradient-brand {
+    background: var(--gradient-brand);
+  }
+  .bg-gradient-brand-warm {
+    background: var(--gradient-brand-warm);
+  }
+  .text-gradient-brand {
+    background: var(--gradient-brand);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 }

@@ -1,6 +1,5 @@
 import { Leaf } from "lucide-react";
 import { Hero } from "@/components/marketing/hero";
-import { StatsBar } from "@/components/marketing/stats-bar";
 import { ValueProps } from "@/components/marketing/value-props";
 import { CtaBanner } from "@/components/marketing/cta-banner";
 import { ComparisonSection } from "@/components/marketing/comparison-section";
@@ -22,8 +21,7 @@ export default async function HomePage() {
     <>
       <Hero />
 
-      {/* Sustainability-forward impact strip, sits visually between the hero and the
-          detailed stats grid below. Kept on the dark brand surface for continuity with Hero. */}
+      {/* Sustainability-forward impact strip, sits visually between the hero and value props. */}
       <section className="bg-brand-void relative -mt-px overflow-hidden pb-2">
         <Container className="flex items-center justify-center gap-2 pt-2 pb-6 text-center">
           <Leaf className="text-brand-leaf size-4 shrink-0" />
@@ -35,21 +33,6 @@ export default async function HomePage() {
         </Container>
       </section>
 
-      {/*
-        TODO(data): these are static placeholder figures. Wire this up to a real
-        aggregate query (e.g. a getPlatformImpactStats() in lib/data/dashboard.ts
-        that sums reserved capacity, credit ledger savings, and an assumed
-        kg-CO2/kWh grid factor) once that aggregate exists — no such query exists
-        yet, so we're not inventing the data layer here.
-      */}
-      <StatsBar
-        stats={[
-          { value: "₹2.4 Cr+", label: "Saved across customer bills" },
-          { value: "20,000+", label: "Bills offset with solar credits" },
-          { value: "1,800+ tCO₂", label: "Emissions avoided to date" },
-          { value: "2 Cities", label: "Bengaluru & Mumbai, live now" },
-        ]}
-      />
       <Reveal>
         <ValueProps />
       </Reveal>

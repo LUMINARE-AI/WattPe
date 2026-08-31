@@ -31,7 +31,7 @@ export async function contactAction(
     const resend = new Resend(process.env.RESEND_API_KEY);
     await resend.emails.send({
       from: "WattPe <no-reply@wattpe.com>",
-      to: "hello@wattpe.com",
+      to: "contact@wattpe.com",
       subject: `New contact message from ${parsed.data.name}`,
       html: `<p><strong>${parsed.data.name}</strong> (${parsed.data.email})</p><p>${parsed.data.message}</p>`,
     });
