@@ -1,10 +1,10 @@
 import type { NextAuthConfig } from "next-auth";
 
 /**
- * Edge-safe subset of the Auth.js config: no Prisma adapter, no Credentials
- * provider (both pull in Node-only DB code). Middleware only needs to read
- * the JWT to know who's logged in, so it uses this config directly instead
- * of the full one in `auth.ts`. See https://authjs.dev/guides/edge-compatibility
+ * Edge-safe subset of the Auth.js config: no MongoDB / Credentials provider
+ * (both pull in Node-only DB code). Middleware only needs to read the JWT
+ * to know who's logged in, so it uses this config directly instead of the
+ * full one in `auth.ts`. See https://authjs.dev/guides/edge-compatibility
  */
 export const authConfig = {
   pages: { signIn: "/login" },

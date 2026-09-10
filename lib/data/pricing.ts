@@ -3,17 +3,39 @@ import {
   DEFAULT_PLANS,
 } from "@/lib/data/pricing-defaults";
 import { hasDatabase, isDatabaseUnavailableError } from "@/lib/data/database";
-import { prisma } from "@/lib/prisma";
+import { connectDB } from "@/lib/db";
+import { asDoc, asDocs } from "@/lib/models/helpers";
+import { Plan } from "@/lib/models/plan";
+import { PricingAssumption } from "@/lib/models/pricing-assumption";
 import { toEngineAssumptions } from "@/lib/pricing-engine/transforms";
 import type { EngineAssumptions, PlanInput } from "@/lib/pricing-engine/types";
+
+type PricingRow = {
+  genUnitsPerKwDay: number;
+  promisedUnitsPerKwDay: number;
+  degradationPct: number;
+  stepEveryYears: number;
+  userStepPct: number;
+  onboardingFeePct: number;
+};
+
+type PlanRow = {
+  code: string;
+  name: string;
+  tenureYears: number;
+  creditRatePerUnit: number;
+  targetXirrPct: number;
+  refundPct: number;
+  autoResell: boolean;
+};
 
 export async function getEngineAssumptions(): Promise<EngineAssumptions> {
   if (!hasDatabase()) return DEFAULT_ENGINE_ASSUMPTIONS;
 
   try {
-    const row = await prisma.pricingAssumption.findUniqueOrThrow({
-      where: { id: "default" },
-    });
+    await connectDB();
+    const row = asDoc<PricingRow>(await PricingAssumption.findOne({ _id: "default" }).lean());
+    if (!row) throw new Error("Missing default pricing assumptions.");
     return toEngineAssumptions({
       genUnitsPerKwDay: Number(row.genUnitsPerKwDay),
       promisedUnitsPerKwDay: Number(row.promisedUnitsPerKwDay),
@@ -32,10 +54,8 @@ export async function getActivePlans(): Promise<PlanInput[]> {
   if (!hasDatabase()) return DEFAULT_PLANS;
 
   try {
-    const rows = await prisma.plan.findMany({
-      where: { isActive: true },
-      orderBy: { tenureYears: "desc" },
-    });
+    await connectDB();
+    const rows = asDocs<PlanRow>(await Plan.find({ isActive: true }).sort({ tenureYears: -1 }).lean());
     return rows.map((p) => ({
       code: p.code,
       name: p.name,

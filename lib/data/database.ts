@@ -1,5 +1,5 @@
 export function hasDatabase() {
-  return Boolean(process.env.DATABASE_URL);
+  return Boolean(process.env.MONGODB_URI);
 }
 
 const UNAVAILABLE_CODES = new Set([
@@ -8,13 +8,24 @@ const UNAVAILABLE_CODES = new Set([
   "ENOTFOUND",
   "ETIMEDOUT",
   "EAI_AGAIN",
-  "P1001", // Can't reach database server
-  "P1002", // Database server timed out
-  "P1017", // Server closed the connection
+]);
+
+const UNAVAILABLE_NAMES = new Set([
+  "MongoNetworkError",
+  "MongoServerSelectionError",
+  "MongoTimeoutError",
+  "MongooseServerSelectionError",
+  "MongoNetworkTimeoutError",
 ]);
 
 export function isDatabaseUnavailableError(error: unknown): boolean {
   if (!error || typeof error !== "object") return false;
+
+  const name =
+    "name" in error && typeof (error as { name?: unknown }).name === "string"
+      ? (error as { name: string }).name
+      : undefined;
+  if (name && UNAVAILABLE_NAMES.has(name)) return true;
 
   const code =
     "code" in error && typeof (error as { code?: unknown }).code === "string"
@@ -23,7 +34,6 @@ export function isDatabaseUnavailableError(error: unknown): boolean {
 
   if (code && UNAVAILABLE_CODES.has(code)) return true;
 
-  // pg / Prisma sometimes nest the system error
   const cause = "cause" in error ? (error as { cause?: unknown }).cause : undefined;
   if (cause && typeof cause === "object" && "code" in cause) {
     const nested = (cause as { code?: string }).code;
@@ -35,7 +45,7 @@ export function isDatabaseUnavailableError(error: unknown): boolean {
       ? (error as { message: string }).message
       : "";
 
-  return /ETIMEDOUT|ECONNREFUSED|ECONNRESET|timeout|Can't reach database/i.test(
+  return /ETIMEDOUT|ECONNREFUSED|ECONNRESET|timeout|Server selection timed out|failed to connect/i.test(
     message,
   );
 }

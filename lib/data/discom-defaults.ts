@@ -1,4 +1,4 @@
-/** Mirrors seeded DISCOMs in prisma/seed.ts. */
+/** Mirrors seeded DISCOMs in scripts/seed.ts. */
 export const DEFAULT_DISCOMS = [
   { id: "jvvnl", name: "JVVNL", state: "Rajasthan" },
   { id: "bescom", name: "BESCOM", state: "Karnataka" },

@@ -1,4 +1,4 @@
-/** Mirrors seeded projects in prisma/seed.ts. */
+/** Mirrors seeded projects in scripts/seed.ts. */
 export const DEFAULT_PROJECTS = [
   {
     slug: "ainergy-5",

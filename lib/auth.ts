@@ -1,9 +1,9 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { PrismaAdapter } from "@auth/prisma-adapter";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
-import { prisma } from "@/lib/prisma";
+import { connectDB } from "@/lib/db";
+import { User } from "@/lib/models/user";
 import { authConfig } from "@/lib/auth.config";
 
 const credentialsSchema = z.object({
@@ -13,7 +13,6 @@ const credentialsSchema = z.object({
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
-  adapter: PrismaAdapter(prisma),
   providers: [
     Credentials({
       credentials: {
@@ -25,14 +24,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (!parsed.success) return null;
         const { email, password } = parsed.data;
 
-        const user = await prisma.user.findUnique({ where: { email } });
+        await connectDB();
+        const user = await User.findOne({ email });
         if (!user) return null;
 
         const passwordValid = await bcrypt.compare(password, user.passwordHash);
         if (!passwordValid) return null;
 
         return {
-          id: user.id,
+          id: user._id.toString(),
           name: user.name,
           email: user.email,
           image: user.image,

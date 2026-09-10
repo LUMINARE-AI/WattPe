@@ -1,6 +1,8 @@
 import { DEFAULT_DISCOMS } from "@/lib/data/discom-defaults";
 import { hasDatabase, isDatabaseUnavailableError } from "@/lib/data/database";
-import { prisma } from "@/lib/prisma";
+import { connectDB } from "@/lib/db";
+import { asDocs } from "@/lib/models/helpers";
+import { SupportedDiscom } from "@/lib/models/supported-discom";
 
 export interface DiscomOption {
   id: string;
@@ -8,15 +10,21 @@ export interface DiscomOption {
   state: string;
 }
 
+type DiscomRow = {
+  _id: { toString(): string };
+  name: string;
+  state: string;
+};
+
 export async function getSupportedDiscoms(): Promise<DiscomOption[]> {
   if (!hasDatabase()) return DEFAULT_DISCOMS;
 
   try {
-    const rows = await prisma.supportedDiscom.findMany({
-      where: { isActive: true },
-      orderBy: [{ state: "asc" }, { name: "asc" }],
-    });
-    return rows.map((d) => ({ id: d.id, name: d.name, state: d.state }));
+    await connectDB();
+    const rows = asDocs<DiscomRow>(
+      await SupportedDiscom.find({ isActive: true }).sort({ state: 1, name: 1 }).lean(),
+    );
+    return rows.map((d) => ({ id: d._id.toString(), name: d.name, state: d.state }));
   } catch (error) {
     if (isDatabaseUnavailableError(error)) return DEFAULT_DISCOMS;
     throw error;

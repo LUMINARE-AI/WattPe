@@ -1,7 +1,8 @@
 "use server";
 
 import { z } from "zod";
-import { prisma } from "@/lib/prisma";
+import { connectDB } from "@/lib/db";
+import { ContactMessage } from "@/lib/models/contact-message";
 
 export type ActionState = { error?: string; success?: boolean };
 
@@ -24,7 +25,8 @@ export async function contactAction(
     return { error: parsed.error.issues[0]?.message ?? "Check the form and try again." };
   }
 
-  await prisma.contactMessage.create({ data: parsed.data });
+  await connectDB();
+  await ContactMessage.create(parsed.data);
 
   if (process.env.RESEND_API_KEY) {
     const { Resend } = await import("resend");

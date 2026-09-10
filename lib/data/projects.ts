@@ -1,6 +1,9 @@
 import { DEFAULT_PROJECTS } from "@/lib/data/project-defaults";
 import { hasDatabase, isDatabaseUnavailableError } from "@/lib/data/database";
-import { prisma } from "@/lib/prisma";
+import { connectDB } from "@/lib/db";
+import { asDoc, asDocs } from "@/lib/models/helpers";
+import { Project } from "@/lib/models/project";
+import type { ProjectStatus } from "@/lib/models/enums";
 
 export interface ProjectSummary {
   slug: string;
@@ -11,23 +14,24 @@ export interface ProjectSummary {
   operationalUntil: string;
   description: string | null;
   heroImage: string | null;
-  // Existing schema columns, not previously surfaced by this mapper.
-  status: "UPCOMING" | "ACTIVE" | "FULL" | "CLOSED";
+  status: ProjectStatus;
   commissionedAt: string | null;
 }
 
-function mapProject(p: {
+type ProjectRow = {
   slug: string;
   name: string;
   state: string;
   discom: string | null;
-  capacityKW: unknown;
+  capacityKW: number;
   operationalUntil: Date;
   description: string | null;
   heroImage: string | null;
-  status: ProjectSummary["status"];
+  status: ProjectStatus;
   commissionedAt: Date | null;
-}): ProjectSummary {
+};
+
+function mapProject(p: ProjectRow): ProjectSummary {
   return {
     slug: p.slug,
     name: p.name,
@@ -48,10 +52,10 @@ export async function getActiveProjects(): Promise<ProjectSummary[]> {
   }
 
   try {
-    const rows = await prisma.project.findMany({
-      where: { status: "ACTIVE" },
-      orderBy: { commissionedAt: "asc" },
-    });
+    await connectDB();
+    const rows = asDocs<ProjectRow>(
+      await Project.find({ status: "ACTIVE" }).sort({ commissionedAt: 1 }).lean(),
+    );
     return rows.map(mapProject);
   } catch (error) {
     if (isDatabaseUnavailableError(error)) {
@@ -67,7 +71,8 @@ export async function getProjectBySlug(slug: string): Promise<ProjectSummary | n
   }
 
   try {
-    const p = await prisma.project.findUnique({ where: { slug } });
+    await connectDB();
+    const p = asDoc<ProjectRow>(await Project.findOne({ slug }).lean());
     if (!p) return null;
     return mapProject(p);
   } catch (error) {
@@ -84,7 +89,8 @@ export async function getAllProjectSlugs(): Promise<string[]> {
   }
 
   try {
-    const rows = await prisma.project.findMany({ select: { slug: true } });
+    await connectDB();
+    const rows = asDocs<{ slug: string }>(await Project.find({}, { slug: 1 }).lean());
     return rows.map((r) => r.slug);
   } catch (error) {
     if (isDatabaseUnavailableError(error)) {

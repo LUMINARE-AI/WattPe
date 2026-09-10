@@ -2,7 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { prisma } from "@/lib/prisma";
+import { connectDB } from "@/lib/db";
+import { Project } from "@/lib/models/project";
 import { requireRole } from "@/lib/requireRole";
 import { hasDatabase } from "@/lib/data/database";
 
@@ -49,19 +50,20 @@ export async function updateProjectAction(
   const data = parsed.data;
 
   try {
-    await prisma.project.update({
-      where: { id: data.id },
-      data: {
-        name: data.name,
-        state: data.state,
-        discom: data.discom,
-        capacityKW: data.capacityKW,
-        operationalUntil: new Date(data.operationalUntil),
-        commissionedAt: data.commissionedAt ? new Date(data.commissionedAt) : null,
-        status: data.status,
-        description: data.description || null,
-      },
+    await connectDB();
+    const updated = await Project.findByIdAndUpdate(data.id, {
+      name: data.name,
+      state: data.state,
+      discom: data.discom,
+      capacityKW: data.capacityKW,
+      operationalUntil: new Date(data.operationalUntil),
+      commissionedAt: data.commissionedAt ? new Date(data.commissionedAt) : null,
+      status: data.status,
+      description: data.description || null,
     });
+    if (!updated) {
+      return { error: "Could not update project. Try again." };
+    }
   } catch {
     return { error: "Could not update project. Try again." };
   }

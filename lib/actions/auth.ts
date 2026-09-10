@@ -5,7 +5,9 @@ import { randomBytes } from "crypto";
 import { z } from "zod";
 import { AuthError } from "next-auth";
 import { signIn, signOut } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { connectDB } from "@/lib/db";
+import { User } from "@/lib/models/user";
+import { VerificationToken } from "@/lib/models/verification-token";
 
 export type ActionState = { error?: string } | undefined;
 
@@ -60,15 +62,14 @@ export async function signupAction(
   }
   const { name, email, password } = parsed.data;
 
-  const existing = await prisma.user.findUnique({ where: { email } });
+  await connectDB();
+  const existing = await User.findOne({ email });
   if (existing) {
     return { error: "An account with this email already exists." };
   }
 
   const passwordHash = await bcrypt.hash(password, 12);
-  await prisma.user.create({
-    data: { name, email, passwordHash, role: "USER" },
-  });
+  await User.create({ name, email, passwordHash, role: "USER" });
 
   try {
     await signIn("credentials", {
@@ -97,14 +98,13 @@ export async function forgotPasswordAction(
     return { error: "Enter a valid email address." };
   }
 
-  const user = await prisma.user.findUnique({ where: { email: parsed.data.email } });
+  await connectDB();
+  const user = await User.findOne({ email: parsed.data.email });
   if (user) {
     const token = randomBytes(32).toString("hex");
     const expires = new Date(Date.now() + 1000 * 60 * 60); // 1 hour
 
-    await prisma.verificationToken.create({
-      data: { identifier: user.email, token, expires },
-    });
+    await VerificationToken.create({ identifier: user.email, token, expires });
 
     const resetUrl = `${process.env.NEXTAUTH_URL ?? "http://localhost:3000"}/reset-password/${token}`;
 
@@ -144,20 +144,17 @@ export async function resetPasswordAction(
     return { error: parsed.error.issues[0]?.message ?? "Check the form and try again." };
   }
 
-  const record = await prisma.verificationToken.findUnique({
-    where: { token: parsed.data.token },
-  });
+  await connectDB();
+  const record = await VerificationToken.findOne({ token: parsed.data.token });
   if (!record || record.expires < new Date()) {
     return { error: "This reset link is invalid or has expired." };
   }
 
   const passwordHash = await bcrypt.hash(parsed.data.password, 12);
-  await prisma.user.update({
-    where: { email: record.identifier },
-    data: { passwordHash },
-  });
-  await prisma.verificationToken.delete({
-    where: { identifier_token: { identifier: record.identifier, token: record.token } },
+  await User.updateOne({ email: record.identifier }, { passwordHash });
+  await VerificationToken.deleteOne({
+    identifier: record.identifier,
+    token: record.token,
   });
 
   try {

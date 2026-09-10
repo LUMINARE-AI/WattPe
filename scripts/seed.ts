@@ -1,6 +1,15 @@
 import "dotenv/config";
 import bcrypt from "bcryptjs";
-import { prisma } from "@/lib/prisma";
+import { connectDB, disconnectDB } from "@/lib/db";
+import { CreditLedgerEntry } from "@/lib/models/credit-ledger-entry";
+import { GenerationReading } from "@/lib/models/generation-reading";
+import { Payment } from "@/lib/models/payment";
+import { Plan } from "@/lib/models/plan";
+import { PricingAssumption } from "@/lib/models/pricing-assumption";
+import { Project } from "@/lib/models/project";
+import { Reservation } from "@/lib/models/reservation";
+import { SupportedDiscom } from "@/lib/models/supported-discom";
+import { User } from "@/lib/models/user";
 import { computePlanEconomics } from "@/lib/pricing-engine/planEconomics";
 import { toEngineAssumptions } from "@/lib/pricing-engine/transforms";
 import type { PlanInput } from "@/lib/pricing-engine/types";
@@ -33,25 +42,28 @@ const DEFAULT_GEN_BASE_KW = 15;
 const DEMO_PASSWORD = "WattPe#2026";
 
 async function main() {
+  await connectDB();
   const passwordHash = await bcrypt.hash(DEMO_PASSWORD, 12);
 
   const [, , user] = await Promise.all([
-    prisma.user.upsert({
-      where: { email: "admin@wattpe.com" },
-      update: {},
-      create: { email: "admin@wattpe.com", name: "WattPe Admin", passwordHash, role: "ADMIN", kycStatus: "VERIFIED" },
-    }),
-    prisma.user.upsert({
-      where: { email: "finance@wattpe.com" },
-      update: {},
-      create: { email: "finance@wattpe.com", name: "WattPe Finance", passwordHash, role: "FINANCE", kycStatus: "VERIFIED" },
-    }),
-    prisma.user.upsert({
-      where: { email: "user@wattpe.com" },
-      update: {},
-      create: { email: "user@wattpe.com", name: "Arjun Rao", passwordHash, role: "USER", kycStatus: "VERIFIED" },
-    }),
+    User.findOneAndUpdate(
+      { email: "admin@wattpe.com" },
+      { $setOnInsert: { email: "admin@wattpe.com", name: "WattPe Admin", passwordHash, role: "ADMIN", kycStatus: "VERIFIED" } },
+      { upsert: true, new: true },
+    ),
+    User.findOneAndUpdate(
+      { email: "finance@wattpe.com" },
+      { $setOnInsert: { email: "finance@wattpe.com", name: "WattPe Finance", passwordHash, role: "FINANCE", kycStatus: "VERIFIED" } },
+      { upsert: true, new: true },
+    ),
+    User.findOneAndUpdate(
+      { email: "user@wattpe.com" },
+      { $setOnInsert: { email: "user@wattpe.com", name: "Arjun Rao", passwordHash, role: "USER", kycStatus: "VERIFIED" } },
+      { upsert: true, new: true },
+    ),
   ]);
+
+  if (!user) throw new Error("Failed to seed demo user.");
 
   const pricingAssumptionColumns = {
     genUnitsPerKwDay: DEF_ASSUMPTIONS.genUnitsPerKwDay,
@@ -61,17 +73,17 @@ async function main() {
     userStepPct: DEF_ASSUMPTIONS.userStepPct,
     onboardingFeePct: DEF_ASSUMPTIONS.onboardingFeePct,
   };
-  await prisma.pricingAssumption.upsert({
-    where: { id: "default" },
-    update: pricingAssumptionColumns,
-    create: { id: "default", ...pricingAssumptionColumns },
+  await PricingAssumption.findByIdAndUpdate("default", pricingAssumptionColumns, {
+    upsert: true,
+    new: true,
+    setDefaultsOnInsert: true,
   });
 
   await Promise.all(
     DEF_PLANS.map((plan) =>
-      prisma.plan.upsert({
-        where: { code: plan.code },
-        update: {
+      Plan.findOneAndUpdate(
+        { code: plan.code },
+        {
           name: plan.name,
           tenureYears: plan.tenureYears,
           creditRatePerUnit: plan.creditRatePerUnit,
@@ -80,17 +92,8 @@ async function main() {
           mixPct: plan.mixPct,
           autoResell: plan.autoResell ?? false,
         },
-        create: {
-          code: plan.code,
-          name: plan.name,
-          tenureYears: plan.tenureYears,
-          creditRatePerUnit: plan.creditRatePerUnit,
-          targetXirrPct: plan.targetXirrPct,
-          refundPct: plan.refundPct,
-          mixPct: plan.mixPct,
-          autoResell: plan.autoResell ?? false,
-        },
-      }),
+        { upsert: true, new: true, setDefaultsOnInsert: true },
+      ),
     ),
   );
 
@@ -103,9 +106,9 @@ async function main() {
     { name: "BEST", state: "Maharashtra" },
   ];
   for (const d of discoms) {
-    const existing = await prisma.supportedDiscom.findFirst({ where: { name: d.name } });
+    const existing = await SupportedDiscom.findOne({ name: d.name });
     if (!existing) {
-      await prisma.supportedDiscom.create({ data: d });
+      await SupportedDiscom.create(d);
     }
   }
 
@@ -121,24 +124,21 @@ async function main() {
       "A 5 kW community solar plant in Jaipur on JVVNL, generating bill credits for reserved households.",
   };
 
-  const project = await prisma.project.upsert({
-    where: { slug: "ainergy-5" },
-    update: projectFields,
-    create: {
-      slug: "ainergy-5",
-      ...projectFields,
-    },
-  });
+  const project = await Project.findOneAndUpdate(
+    { slug: "ainergy-5" },
+    { ...projectFields },
+    { upsert: true, new: true, setDefaultsOnInsert: true },
+  );
+
+  if (!project) throw new Error("Failed to seed project.");
 
   // Keep only one live project — close legacy demo plants if present
-  await prisma.project.updateMany({
-    where: { slug: { in: ["vega-150", "helios-80"] } },
-    data: { status: "CLOSED" },
-  });
+  await Project.updateMany({ slug: { $in: ["vega-150", "helios-80"] } }, { status: "CLOSED" });
 
   // ---- Demo reservation: Arjun on Growth-15 at AINERGY 5, started 12 months ago ----
   const growth15 = DEF_PLANS[0];
-  const dbPlan = await prisma.plan.findUniqueOrThrow({ where: { code: growth15.code } });
+  const dbPlan = await Plan.findOne({ code: growth15.code });
+  if (!dbPlan) throw new Error("Missing Growth-15 plan.");
   const assumptions = toEngineAssumptions(DEF_ASSUMPTIONS);
   const economics = computePlanEconomics(growth15, assumptions);
 
@@ -152,38 +152,36 @@ async function main() {
   const tenureEndsAt = new Date(startDate);
   tenureEndsAt.setUTCFullYear(tenureEndsAt.getUTCFullYear() + growth15.tenureYears);
 
-  const existingReservation = await prisma.reservation.findFirst({
-    where: { userId: user.id, projectId: project.id, planId: dbPlan.id },
+  const existingReservation = await Reservation.findOne({
+    userId: user._id,
+    projectId: project._id,
+    planId: dbPlan._id,
   });
 
   const reservation =
     existingReservation ??
-    (await prisma.reservation.create({
-      data: {
-        userId: user.id,
-        projectId: project.id,
-        planId: dbPlan.id,
-        capacityKW: reservationCapacityKW,
-        feePerKW: reservationFeePerKW,
-        reservationFee,
-        status: "ACTIVE",
-        startDate,
-        tenureEndsAt,
-      },
+    (await Reservation.create({
+      userId: user._id,
+      projectId: project._id,
+      planId: dbPlan._id,
+      capacityKW: reservationCapacityKW,
+      feePerKW: reservationFeePerKW,
+      reservationFee,
+      status: "ACTIVE",
+      startDate,
+      tenureEndsAt,
     }));
 
-  const existingPayment = await prisma.payment.findFirst({ where: { reservationId: reservation.id } });
+  const existingPayment = await Payment.findOne({ reservationId: reservation._id });
   if (!existingPayment) {
-    await prisma.payment.create({
-      data: {
-        reservationId: reservation.id,
-        userId: user.id,
-        amount: reservationFee,
-        type: "RESERVATION_FEE",
-        status: "SUCCEEDED",
-        provider: "seed",
-        createdAt: startDate,
-      },
+    await Payment.create({
+      reservationId: reservation._id,
+      userId: user._id,
+      amount: reservationFee,
+      type: "RESERVATION_FEE",
+      status: "SUCCEEDED",
+      provider: "seed",
+      createdAt: startDate,
     });
   }
 
@@ -200,36 +198,30 @@ async function main() {
     const readingDate = new Date(startDate);
     readingDate.setUTCMonth(readingDate.getUTCMonth() + i);
 
-    await prisma.generationReading.upsert({
-      where: { projectId_readingDate: { projectId: project.id, readingDate } },
-      update: { kwhGenerated: projectKWh, source: "SEEDED" },
-      create: {
-        projectId: project.id,
-        readingDate,
-        kwhGenerated: projectKWh,
-        source: "SEEDED",
-      },
-    });
+    await GenerationReading.findOneAndUpdate(
+      { projectId: project._id, readingDate },
+      { kwhGenerated: projectKWh, source: "SEEDED" },
+      { upsert: true, new: true, setDefaultsOnInsert: true },
+    );
 
     const unitsAllocated =
       reservationCapacityKW * DEF_ASSUMPTIONS.promisedUnitsPerKwDay * MONTH_DAYS[i];
 
-    const existingEntry = await prisma.creditLedgerEntry.findFirst({
-      where: { reservationId: reservation.id, periodStart: readingDate },
+    const existingEntry = await CreditLedgerEntry.findOne({
+      reservationId: reservation._id,
+      periodStart: readingDate,
     });
     if (!existingEntry) {
-      await prisma.creditLedgerEntry.create({
-        data: {
-          reservationId: reservation.id,
-          userId: user.id,
-          periodStart: readingDate,
-          unitsAllocated,
-          creditRatePerUnit: growth15.creditRatePerUnit,
-          creditAmount: monthlyCreditAmount,
-          gridTariffAssumed,
-          savingsAmount: monthlyCreditAmount,
-          offsetStatus: "APPLIED",
-        },
+      await CreditLedgerEntry.create({
+        reservationId: reservation._id,
+        userId: user._id,
+        periodStart: readingDate,
+        unitsAllocated,
+        creditRatePerUnit: growth15.creditRatePerUnit,
+        creditAmount: monthlyCreditAmount,
+        gridTariffAssumed,
+        savingsAmount: monthlyCreditAmount,
+        offsetStatus: "APPLIED",
       });
     }
   }
@@ -247,5 +239,5 @@ main()
     process.exit(1);
   })
   .finally(async () => {
-    await prisma.$disconnect();
+    await disconnectDB();
   });

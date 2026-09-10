@@ -1,7 +1,7 @@
 import { toEngineAssumptions } from "@/lib/pricing-engine/transforms";
 import type { EngineAssumptions, PlanInput } from "@/lib/pricing-engine/types";
 
-/** Mirrors DEF / DEF_PLANS in prisma/seed.ts and dash_studio_v4.py. */
+/** Mirrors DEF / DEF_PLANS in scripts/seed.ts and dash_studio_v4.py. */
 export const DEFAULT_ENGINE_ASSUMPTIONS: EngineAssumptions = toEngineAssumptions({
   genUnitsPerKwDay: 4.5,
   promisedUnitsPerKwDay: 4.0,

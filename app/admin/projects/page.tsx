@@ -2,7 +2,9 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { requireRole } from "@/lib/requireRole";
 import { hasDatabase } from "@/lib/data/database";
-import { prisma } from "@/lib/prisma";
+import { connectDB } from "@/lib/db";
+import { asDocs } from "@/lib/models/helpers";
+import { Project } from "@/lib/models/project";
 import { DEFAULT_PROJECTS } from "@/lib/data/project-defaults";
 import {
   ProjectEditForm,
@@ -32,13 +34,23 @@ async function loadProjects(): Promise<{ projects: AdminProject[]; fromDb: boole
   }
 
   try {
-    const rows = await prisma.project.findMany({
-      orderBy: [{ status: "asc" }, { name: "asc" }],
-    });
+    await connectDB();
+    const rows = asDocs<{
+      _id: { toString(): string };
+      slug: string;
+      name: string;
+      state: string;
+      discom: string | null;
+      capacityKW: number;
+      operationalUntil: Date;
+      commissionedAt: Date | null;
+      status: AdminProject["status"];
+      description: string | null;
+    }>(await Project.find().sort({ status: 1, name: 1 }).lean());
     return {
       fromDb: true,
       projects: rows.map((p) => ({
-        id: p.id,
+        id: p._id.toString(),
         slug: p.slug,
         name: p.name,
         state: p.state,
