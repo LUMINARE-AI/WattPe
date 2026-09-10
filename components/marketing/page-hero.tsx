@@ -23,20 +23,24 @@ export function PageHero({
         aria-hidden
         className="bg-brand-sun/10 pointer-events-none absolute top-[20%] left-[30%] size-[280px] rounded-full blur-3xl"
       />
-      <Container className="relative py-20 sm:py-28">
-        {eyebrow && (
-          <p className="text-brand-sun mb-3 text-sm font-semibold tracking-wide uppercase">
-            {eyebrow}
-          </p>
-        )}
-        <h1 className="max-w-2xl text-4xl font-bold tracking-tight text-balance text-white sm:text-5xl">
-          {title}
-        </h1>
-        {description && (
-          <p className="mt-4 max-w-xl text-lg text-pretty text-white/70">
-            {description}
-          </p>
-        )}
+      <Container className="relative py-12 sm:py-16">
+        <div className="grid items-end gap-6 lg:grid-cols-[1.2fr_0.9fr] lg:gap-14">
+          <div>
+            {eyebrow && (
+              <p className="text-brand-sun mb-3 text-sm font-semibold tracking-wide uppercase">
+                {eyebrow}
+              </p>
+            )}
+            <h1 className="max-w-2xl text-4xl font-bold tracking-tight text-balance text-white sm:text-5xl">
+              {title}
+            </h1>
+          </div>
+          {description && (
+            <p className="max-w-xl text-lg text-pretty text-white/70 lg:max-w-none lg:pb-1">
+              {description}
+            </p>
+          )}
+        </div>
       </Container>
     </section>
   );

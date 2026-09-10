@@ -27,7 +27,7 @@ const ROWS: { old: string; wattpe: string }[] = [
 
 export function ComparisonSection() {
   return (
-    <section className="py-20 sm:py-28">
+    <section className="pt-20 pb-10 sm:pt-28 sm:pb-14">
       <Container>
         <SectionHeading
           eyebrow="The difference"

@@ -35,7 +35,7 @@ export default async function ProjectsPage() {
       />
 
       <Reveal>
-        <section className="relative overflow-hidden py-20 sm:py-28">
+        <section className="relative overflow-hidden pt-10 pb-10 sm:pt-14 sm:pb-14">
           <div
             aria-hidden
             className="bg-brand-leaf/10 pointer-events-none absolute top-[-10%] right-[-10%] size-[420px] rounded-full blur-3xl"
@@ -64,7 +64,7 @@ export default async function ProjectsPage() {
       </Reveal>
 
       <Reveal>
-        <section className="bg-muted/40 py-20 sm:py-28">
+        <section className="bg-muted/40 pt-10 pb-10 sm:pt-14 sm:pb-14">
           <Container className="grid gap-8 lg:grid-cols-[1.4fr_1fr]">
             <SavingsCalculator plan={plan} assumptions={assumptions} />
             <CompatibilityChecker discoms={discoms} />

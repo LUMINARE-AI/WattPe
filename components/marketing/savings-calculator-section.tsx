@@ -14,14 +14,15 @@ export function SavingsCalculatorSection({
 }) {
   return (
     <section className={className}>
-      <Container className="max-w-2xl">
-        <SectionHeading
-          eyebrow="Try it yourself"
-          title="See what you'd save"
-          description="Enter your average monthly bill and desired savings to get an instant forecast."
-          align="center"
-        />
-        <div className="mt-12">
+      <Container>
+        <div className="grid items-center gap-10 lg:grid-cols-[1fr_1.15fr] lg:gap-14">
+          <SectionHeading
+            eyebrow="Try it yourself"
+            title="See what you'd save"
+            description="Enter your average monthly bill and desired savings to get an instant forecast."
+            align="left"
+            className="lg:max-w-md"
+          />
           <SavingsCalculator plan={plan} assumptions={assumptions} />
         </div>
       </Container>

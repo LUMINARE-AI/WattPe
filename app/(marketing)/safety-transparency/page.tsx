@@ -45,7 +45,7 @@ export default function SafetyTransparencyPage() {
         description="Solar capacity is a long-term commitment. Here's exactly how WattPe keeps that commitment safe and verifiable."
       />
 
-      <section className="py-20 sm:py-28">
+      <section className="pt-20 pb-10 sm:pt-28 sm:pb-14">
         <Container>
           <div className="grid gap-6 sm:grid-cols-2">
             {PILLARS.map((pillar) => (
@@ -68,25 +68,43 @@ export default function SafetyTransparencyPage() {
         </Container>
       </section>
 
-      <section className="bg-muted/40 py-20 sm:py-28">
-        <Container className="max-w-3xl">
-          <div className="border-border bg-card rounded-3xl border p-8 shadow-[0_1px_2px_rgba(16,23,42,0.04),0_8px_24px_rgba(16,23,42,0.06)] sm:p-10">
-            <h2 className="font-heading text-2xl font-bold">
-              A note on risk
-            </h2>
-            <p className="text-muted-foreground mt-4 text-sm leading-relaxed">
-              WattPe plans are long-tenure commitments tied to a physical
-              solar asset, not a guaranteed financial product. Savings depend
-              on actual plant generation, plan terms, and continued DISCOM
-              support for third-party credit arrangements. Read the full{" "}
-              <a
-                href="/legal/disclaimer"
-                className="text-primary underline underline-offset-2"
-              >
-                disclaimer
-              </a>{" "}
-              before reserving capacity.
-            </p>
+      <section className="bg-muted/40 pt-10 pb-10 sm:pt-14 sm:pb-14">
+        <Container>
+          <div className="border-border from-brand-green/5 via-card to-brand-cyan/5 relative overflow-hidden rounded-3xl border bg-gradient-to-br p-8 shadow-[0_1px_2px_rgba(15,31,31,0.04),0_8px_24px_rgba(15,31,31,0.06)] sm:p-10">
+            <div
+              aria-hidden
+              className="bg-brand-sun/15 pointer-events-none absolute -top-16 -right-16 size-48 rounded-full blur-3xl"
+            />
+            <div className="relative grid items-start gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.3fr)] lg:gap-12">
+              <div className="flex items-start gap-4 lg:block">
+                <div className="border-brand-sun/30 bg-brand-sun/10 flex size-12 shrink-0 items-center justify-center rounded-2xl border lg:mb-5">
+                  <FileCheck className="text-brand-sun size-5" />
+                </div>
+                <div>
+                  <p className="text-brand-sun text-sm font-semibold tracking-wide uppercase">
+                    Before you reserve
+                  </p>
+                  <h2 className="font-heading mt-2 text-2xl font-bold sm:text-3xl">
+                    A note on risk
+                  </h2>
+                </div>
+              </div>
+              <div className="lg:border-border lg:border-l lg:pl-12">
+                <p className="text-muted-foreground text-base leading-relaxed">
+                  WattPe plans are long-tenure commitments tied to a physical
+                  solar asset, not a guaranteed financial product. Savings depend
+                  on actual plant generation, plan terms, and continued DISCOM
+                  support for third-party credit arrangements.
+                </p>
+                <a
+                  href="/legal/disclaimer"
+                  className="text-primary mt-5 inline-flex items-center gap-1.5 text-sm font-semibold underline-offset-4 hover:underline"
+                >
+                  Read the full disclaimer
+                  <span aria-hidden>→</span>
+                </a>
+              </div>
+            </div>
           </div>
         </Container>
       </section>

@@ -5,7 +5,7 @@ import { FOOTER_LINKS } from "@/lib/content/nav";
 
 export function Footer() {
   return (
-    <footer className="bg-brand-void relative mt-24 overflow-hidden text-white/90">
+    <footer className="bg-brand-void relative mt-12 overflow-hidden text-white/90">
       <div
         aria-hidden
         className="from-brand-green/25 pointer-events-none absolute top-0 left-1/4 size-[420px] -translate-y-1/2 rounded-full bg-gradient-to-br via-brand-cyan/15 to-transparent blur-3xl"

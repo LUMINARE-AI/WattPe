@@ -95,6 +95,7 @@ async function main() {
   );
 
   const discoms = [
+    { name: "JVVNL", state: "Rajasthan" },
     { name: "BESCOM", state: "Karnataka" },
     { name: "MSEDCL", state: "Maharashtra" },
     { name: "Adani Electricity Mumbai", state: "Maharashtra" },
@@ -108,40 +109,34 @@ async function main() {
     }
   }
 
+  const projectFields = {
+    name: "AINERGY 5",
+    state: "Jaipur",
+    discom: "JVVNL",
+    capacityKW: 5,
+    operationalUntil: new Date("2040-03-31"),
+    commissionedAt: new Date("2024-06-01"),
+    status: "ACTIVE" as const,
+    description:
+      "A 5 kW community solar plant in Jaipur on JVVNL, generating bill credits for reserved households.",
+  };
+
   const project = await prisma.project.upsert({
-    where: { slug: "vega-150" },
-    update: { name: "Bellandur 250" },
+    where: { slug: "ainergy-5" },
+    update: projectFields,
     create: {
-      slug: "vega-150",
-      name: "Bellandur 250",
-      state: "Karnataka",
-      discom: "BESCOM",
-      capacityKW: 250,
-      operationalUntil: new Date("2040-03-31"),
-      commissionedAt: new Date("2024-06-01"),
-      status: "ACTIVE",
-      description:
-        "A 250 kW community solar plant near Bengaluru, generating credits for over 60 reserved households.",
+      slug: "ainergy-5",
+      ...projectFields,
     },
   });
 
-  await prisma.project.upsert({
-    where: { slug: "helios-80" },
-    update: { name: "Kalyan 80" },
-    create: {
-      slug: "helios-80",
-      name: "Kalyan 80",
-      state: "Maharashtra",
-      discom: "Adani Electricity Mumbai",
-      capacityKW: 80,
-      operationalUntil: new Date("2039-12-31"),
-      commissionedAt: new Date("2024-11-01"),
-      status: "ACTIVE",
-      description: "An 80 kW rooftop-scale community plant serving Mumbai households on Adani Electricity.",
-    },
+  // Keep only one live project — close legacy demo plants if present
+  await prisma.project.updateMany({
+    where: { slug: { in: ["vega-150", "helios-80"] } },
+    data: { status: "CLOSED" },
   });
 
-  // ---- Demo reservation: Arjun on Growth-15 at Bellandur 250, started 12 months ago ----
+  // ---- Demo reservation: Arjun on Growth-15 at AINERGY 5, started 12 months ago ----
   const growth15 = DEF_PLANS[0];
   const dbPlan = await prisma.plan.findUniqueOrThrow({ where: { code: growth15.code } });
   const assumptions = toEngineAssumptions(DEF_ASSUMPTIONS);

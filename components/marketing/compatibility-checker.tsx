@@ -18,7 +18,7 @@ import {
 import type { DiscomOption } from "@/lib/data/discoms";
 
 export function CompatibilityChecker({ discoms }: { discoms: DiscomOption[] }) {
-  const [selectedId, setSelectedId] = useState<string | undefined>();
+  const [selectedId, setSelectedId] = useState("");
   const selected = discoms.find((d) => d.id === selectedId);
 
   return (
@@ -32,7 +32,7 @@ export function CompatibilityChecker({ discoms }: { discoms: DiscomOption[] }) {
       <CardContent className="space-y-4">
         <Select
           value={selectedId}
-          onValueChange={(value) => setSelectedId(value ?? undefined)}
+          onValueChange={(value) => setSelectedId(value ?? "")}
         >
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Select your electricity provider" />

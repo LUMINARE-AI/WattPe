@@ -2,7 +2,7 @@
 // WattPe dashboard screenshot (e.g. an <Image> of a captured PNG) — the outer
 // device frame can wrap a real screenshot without further layout changes.
 const DISCOMS = [
-  { code: "BES", label: "BESCOM", color: "var(--brand-green)" },
+  { code: "JVV", label: "JVVNL Jaipur", color: "var(--brand-green)" },
   { code: "MSE", label: "MSEDCL", color: "var(--brand-cyan)" },
   { code: "AEM", label: "Adani Mumbai", color: "var(--brand-sun)" },
 ];
@@ -26,9 +26,9 @@ export function DashboardPreview() {
               Live
             </span>
             <p className="absolute bottom-2 left-2.5 text-[10px] font-semibold text-white">
-              Bellandur 250
+              Sitapura 250
               <span className="block font-normal text-white/55">
-                Bengaluru, Karnataka
+                Jaipur, Rajasthan
               </span>
             </p>
           </div>

@@ -25,7 +25,7 @@ const PROPS: { icon: LucideIcon; title: string; description: string }[] = [
 
 export function ValueProps() {
   return (
-    <section className="py-20 sm:py-28">
+    <section className="pt-20 pb-10 sm:pt-28 sm:pb-14">
       <Container>
         <SectionHeading
           eyebrow="Why WattPe"

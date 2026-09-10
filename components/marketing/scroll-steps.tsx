@@ -59,7 +59,7 @@ export function ScrollSteps() {
   }, []);
 
   return (
-    <section className="py-20 sm:py-28">
+    <section className="pt-10 pb-20 sm:pt-14 sm:pb-28">
       <Container>
         <SectionHeading
           eyebrow="How it works"
