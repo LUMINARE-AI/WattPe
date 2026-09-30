@@ -8,6 +8,8 @@ import {
   PiggyBank,
   FileText,
   Receipt,
+  FolderKanban,
+  Users,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/shared/logo";
@@ -20,8 +22,14 @@ const NAV = [
   { href: "/dashboard/user/payments", label: "Payments", icon: Receipt },
 ];
 
-export function DashboardSidebar() {
+const ADMIN_NAV = [
+  { href: "/dashboard/user/projects", label: "Projects", icon: FolderKanban },
+  { href: "/dashboard/user/users", label: "Users", icon: Users },
+];
+
+export function DashboardSidebar({ isAdmin }: { isAdmin: boolean }) {
   const pathname = usePathname();
+  const items = isAdmin ? [...NAV, ...ADMIN_NAV] : NAV;
 
   return (
     <aside className="border-border/60 bg-card hidden w-64 shrink-0 border-r md:block">
@@ -31,7 +39,7 @@ export function DashboardSidebar() {
         </Link>
       </div>
       <nav className="space-y-1 px-3">
-        {NAV.map((item) => {
+        {items.map((item) => {
           const active =
             item.href === "/dashboard/user"
               ? pathname === item.href

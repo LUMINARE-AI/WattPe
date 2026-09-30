@@ -3,6 +3,7 @@ import { PageHero } from "@/components/marketing/page-hero";
 import { Container } from "@/components/shared/container";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { CtaBanner } from "@/components/marketing/cta-banner";
+import { FoundersSection } from "@/components/marketing/founders-section";
 import { Reveal } from "@/components/shared/reveal";
 
 export const metadata: Metadata = {
@@ -11,12 +12,6 @@ export const metadata: Metadata = {
     "WattPe is building community solar for India — reserve capacity in a shared plant and save on your electricity bill, no rooftop required.",
 };
 
-const TEAM = [
-  { name: "Founding team", role: "Energy & Fintech", note: "Bios coming soon." },
-  { name: "Engineering", role: "Platform & Metering", note: "Bios coming soon." },
-  { name: "Operations", role: "Plant Partnerships", note: "Bios coming soon." },
-];
-
 export default function AboutUsPage() {
   return (
     <>
@@ -24,12 +19,13 @@ export default function AboutUsPage() {
         eyebrow="About WattPe"
         title="Solar for everyone, not just rooftop owners"
         description="We believe clean energy savings shouldn't depend on owning a roof. WattPe lets anyone reserve capacity in a shared solar plant and save from day one."
+        split="md"
       />
 
       <Reveal>
-        <section className="pt-20 pb-10 sm:pt-28 sm:pb-14">
+        <section className="pt-10 pb-8 sm:pt-12 sm:pb-10">
           <Container>
-            <div className="grid items-start gap-8 lg:grid-cols-2 lg:gap-14">
+            <div className="grid items-start gap-6 md:grid-cols-2 md:gap-10">
               <SectionHeading
                 eyebrow="Our mission"
                 title="Making solar accessible, one reservation at a time"
@@ -54,50 +50,38 @@ export default function AboutUsPage() {
       </Reveal>
 
       <Reveal>
-        <section className="bg-muted/40 pt-10 pb-10 sm:pt-14 sm:pb-14">
+        <section className="bg-muted/40 pt-10 pb-4 sm:pt-14 sm:pb-5">
           <Container>
             <SectionHeading eyebrow="Team" title="Who's behind WattPe" align="center" />
-            <div className="mt-12 grid gap-6 sm:grid-cols-3">
-              {TEAM.map((member) => (
-                <div
-                  key={member.name}
-                  className="border-border bg-card rounded-2xl border p-6 text-center shadow-[0_1px_2px_rgba(16,23,42,0.04),0_8px_24px_rgba(16,23,42,0.06)]"
-                >
-                  <div className="bg-accent text-accent-foreground mx-auto flex size-14 items-center justify-center rounded-full text-lg font-semibold">
-                    {member.name.charAt(0)}
-                  </div>
-                  <h3 className="mt-4 font-semibold">{member.name}</h3>
-                  <p className="text-primary text-sm">{member.role}</p>
-                  <p className="text-muted-foreground mt-1 text-xs">{member.note}</p>
-                </div>
-              ))}
-            </div>
+            <FoundersSection />
           </Container>
         </section>
       </Reveal>
 
       <Reveal>
-        <section className="relative overflow-hidden pt-10 pb-20 sm:pt-14 sm:pb-28">
-          <div
-            aria-hidden
-            className="bg-brand-leaf/10 pointer-events-none absolute top-1/2 left-1/2 size-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
-          />
-          <Container className="relative max-w-3xl">
-            <SectionHeading eyebrow="Registered office" title="Where to find us" />
-            <p className="text-muted-foreground mt-4 text-sm leading-relaxed">
-              WattPe Energy Private Limited
-              <br />
-              Bengaluru, Karnataka, India
-              <br />
-              <span className="text-xs">
-                (Full registered address to be published here.)
-              </span>
-            </p>
+        <section className="py-2 sm:py-3">
+          <Container>
+            <div className="border-border bg-card grid gap-3 rounded-2xl border px-5 py-4 sm:grid-cols-3 sm:items-center sm:gap-6 sm:px-6">
+              <div>
+                <p className="text-primary text-xs font-semibold tracking-wide uppercase">
+                  Registered office
+                </p>
+                <h2 className="font-heading mt-1 text-lg font-bold">Where to find us</h2>
+              </div>
+              <p className="text-sm font-medium">WattPe Energy Private Limited</p>
+              <p className="text-muted-foreground text-sm leading-relaxed sm:text-right">
+                Bengaluru, Karnataka, India
+                <br />
+                <span className="text-xs">
+                  (Full registered address to be published here.)
+                </span>
+              </p>
+            </div>
           </Container>
         </section>
       </Reveal>
 
-      <CtaBanner />
+      <CtaBanner layout="split" className="pt-3 pb-8 sm:pt-4 sm:pb-10" />
     </>
   );
 }

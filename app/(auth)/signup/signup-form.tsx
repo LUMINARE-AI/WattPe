@@ -6,13 +6,13 @@ import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { loginAction, type ActionState } from "@/lib/actions/auth";
+import { signupAction, type ActionState } from "@/lib/actions/auth";
 
-export function LoginForm() {
+export function SignupForm() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") ?? "/dashboard/user";
   const [state, formAction, pending] = useActionState<ActionState, FormData>(
-    loginAction,
+    signupAction,
     undefined,
   );
 
@@ -20,14 +20,26 @@ export function LoginForm() {
     <div className="w-full max-w-sm">
       <div className="rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur">
         <h1 className="font-heading text-2xl font-semibold text-white">
-          Log in to WattPe
+          Create your account
         </h1>
         <p className="mt-1 text-sm text-white/60">
-          Welcome back — check your savings and generation.
+          Reserve your first plant in a couple of minutes.
         </p>
 
         <form action={formAction} className="mt-6 space-y-4">
           <input type="hidden" name="callbackUrl" value={callbackUrl} />
+          <div className="space-y-1.5">
+            <Label htmlFor="name" className="text-white/80">
+              Full name
+            </Label>
+            <Input
+              id="name"
+              name="name"
+              autoComplete="name"
+              required
+              className="border-white/15 bg-white/5 text-white"
+            />
+          </div>
           <div className="space-y-1.5">
             <Label htmlFor="email" className="text-white/80">
               Email
@@ -42,22 +54,15 @@ export function LoginForm() {
             />
           </div>
           <div className="space-y-1.5">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="password" className="text-white/80">
-                Password
-              </Label>
-              <Link
-                href="/forgot-password"
-                className="text-brand-sun text-xs hover:underline"
-              >
-                Forgot password?
-              </Link>
-            </div>
+            <Label htmlFor="password" className="text-white/80">
+              Password
+            </Label>
             <Input
               id="password"
               name="password"
               type="password"
-              autoComplete="current-password"
+              autoComplete="new-password"
+              minLength={8}
               required
               className="border-white/15 bg-white/5 text-white"
             />
@@ -68,17 +73,17 @@ export function LoginForm() {
           )}
 
           <Button type="submit" className="w-full" disabled={pending}>
-            {pending ? "Logging in…" : "Log in"}
+            {pending ? "Creating account…" : "Create account"}
           </Button>
         </form>
 
         <p className="mt-6 text-center text-sm text-white/60">
-          New to WattPe?{" "}
+          Already have an account?{" "}
           <Link
-            href={`/signup?callbackUrl=${encodeURIComponent(callbackUrl)}`}
+            href={`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`}
             className="text-brand-sun hover:underline"
           >
-            Create an account
+            Log in
           </Link>
         </p>
       </div>

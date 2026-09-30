@@ -4,10 +4,12 @@ export function PageHero({
   eyebrow,
   title,
   description,
+  split = "lg",
 }: {
   eyebrow?: string;
   title: string;
   description?: string;
+  split?: "md" | "lg";
 }) {
   return (
     <section className="bg-brand-void relative overflow-hidden">
@@ -24,19 +26,37 @@ export function PageHero({
         className="bg-brand-sun/10 pointer-events-none absolute top-[20%] left-[30%] size-[280px] rounded-full blur-3xl"
       />
       <Container className="relative py-12 sm:py-16">
-        <div className="grid items-end gap-6 lg:grid-cols-[1.2fr_0.9fr] lg:gap-14">
+        <div
+          className={
+            split === "md"
+              ? "grid items-end gap-6 md:grid-cols-[1.15fr_0.85fr] md:gap-10"
+              : "grid items-end gap-6 lg:grid-cols-[1.2fr_0.9fr] lg:gap-14"
+          }
+        >
           <div>
             {eyebrow && (
               <p className="text-brand-sun mb-3 text-sm font-semibold tracking-wide uppercase">
                 {eyebrow}
               </p>
             )}
-            <h1 className="max-w-2xl text-4xl font-bold tracking-tight text-balance text-white sm:text-5xl">
+            <h1
+              className={
+                split === "md"
+                  ? "text-4xl font-bold tracking-tight text-balance text-white sm:text-5xl"
+                  : "max-w-2xl text-4xl font-bold tracking-tight text-balance text-white sm:text-5xl"
+              }
+            >
               {title}
             </h1>
           </div>
           {description && (
-            <p className="max-w-xl text-lg text-pretty text-white/70 lg:max-w-none lg:pb-1">
+            <p
+              className={
+                split === "md"
+                  ? "max-w-xl text-lg text-pretty text-white/70 md:max-w-none md:pb-1"
+                  : "max-w-xl text-lg text-pretty text-white/70 lg:max-w-none lg:pb-1"
+              }
+            >
               {description}
             </p>
           )}

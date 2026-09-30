@@ -28,7 +28,7 @@ export function Hero() {
         </g>
       </svg>
 
-      <Container className="relative grid items-center gap-14 py-24 sm:py-32 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10">
+      <Container className="relative grid items-center gap-14 pt-8 pb-24 sm:pt-12 sm:pb-32 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10">
         <div>
           <div className="border-brand-navy-light/70 bg-brand-navy-light/50 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm text-white">
             <Sparkles className="text-brand-sun size-4" />

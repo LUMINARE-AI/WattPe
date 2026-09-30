@@ -11,6 +11,13 @@ import { VerificationToken } from "@/lib/models/verification-token";
 
 export type ActionState = { error?: string } | undefined;
 
+function safeCallbackUrl(raw: FormDataEntryValue | null): string {
+  if (typeof raw !== "string" || !raw.startsWith("/") || raw.startsWith("//") || raw.includes("\\")) {
+    return "/dashboard/user";
+  }
+  return raw;
+}
+
 const loginSchema = z.object({
   email: z.email(),
   password: z.string().min(1),
@@ -32,7 +39,7 @@ export async function loginAction(
     await signIn("credentials", {
       email: parsed.data.email,
       password: parsed.data.password,
-      redirectTo: (formData.get("callbackUrl") as string) || "/dashboard/user",
+      redirectTo: safeCallbackUrl(formData.get("callbackUrl")),
     });
   } catch (error) {
     if (error instanceof AuthError) {
@@ -75,7 +82,7 @@ export async function signupAction(
     await signIn("credentials", {
       email,
       password,
-      redirectTo: "/dashboard/user",
+      redirectTo: safeCallbackUrl(formData.get("callbackUrl")),
     });
   } catch (error) {
     if (error instanceof AuthError) {

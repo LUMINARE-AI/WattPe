@@ -1,17 +1,16 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MapPin, Calendar, Zap, Leaf, TreePine, CloudOff } from "lucide-react";
 import { Container } from "@/components/shared/container";
-import { Button } from "@/components/ui/button";
+import { ProjectReserveSection } from "@/components/marketing/project-reserve-section";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
   TableBody,
   TableCell,
   TableRow,
 } from "@/components/ui/table";
+import { auth } from "@/lib/auth";
 import {
   getAllProjectSlugs,
   getProjectBySlug,
@@ -20,7 +19,7 @@ import {
 import { getActivePlans, getEngineAssumptions } from "@/lib/data/pricing";
 import { computePlanEconomics } from "@/lib/pricing-engine/planEconomics";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 // --- Sustainability impact estimate ---------------------------------------
 // The data layer doesn't yet track per-project generation history, so this
@@ -97,10 +96,11 @@ export default async function ProjectDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const [project, plans, assumptions] = await Promise.all([
+  const [project, plans, assumptions, session] = await Promise.all([
     getProjectBySlug(slug),
     getActivePlans(),
     getEngineAssumptions(),
+    auth(),
   ]);
 
   if (!project) notFound();
@@ -137,7 +137,7 @@ export default async function ProjectDetailPage({
           aria-hidden
           className="bg-brand-leaf/10 pointer-events-none absolute bottom-[-40%] left-[-5%] size-[360px] rounded-full blur-3xl"
         />
-        <Container className="relative py-20 sm:py-28">
+        <Container className="relative py-10 sm:py-14">
           <Badge variant={statusMeta.badgeVariant} className="h-6 px-3 text-xs">
             {statusMeta.label}
           </Badge>
@@ -165,9 +165,8 @@ export default async function ProjectDetailPage({
         </Container>
       </section>
 
-      {/* Project overview */}
-      <section className="py-16 sm:py-24">
-        <Container className="grid gap-8 lg:grid-cols-[1.1fr_1fr]">
+      <section className="py-8 sm:py-10">
+        <Container className="grid gap-5 lg:grid-cols-[1.1fr_1fr]">
           <div className="border-border bg-card overflow-hidden rounded-3xl border shadow-[0_1px_2px_rgba(16,23,42,0.04),0_8px_24px_rgba(16,23,42,0.06)]">
             <div className="border-border border-b px-6 py-4">
               <h2 className="font-heading text-lg font-bold">Project overview</h2>
@@ -243,71 +242,28 @@ export default async function ProjectDetailPage({
             </p>
           </div>
         </Container>
-      </section>
 
-      <section className="py-16 sm:py-24">
-        <Container>
-          <h2 className="font-heading text-2xl font-bold">
-            Choose your plan
-          </h2>
-          <p className="text-muted-foreground mt-2 max-w-xl text-sm">
-            Every plan credits your bill for the tenure shown, at the credit
-            rate locked in when you reserve.
-          </p>
-
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {plans.map((plan) => {
+        <Container className="mt-8">
+          <ProjectReserveSection
+            projectSlug={project.slug}
+            projectName={project.name}
+            projectStatus={project.status}
+            isLoggedIn={Boolean(session?.user)}
+            plans={plans.map((plan) => {
               const economics = computePlanEconomics(plan, assumptions);
-              return (
-                <Card
-                  key={plan.code}
-                  className="border-border/80 hover:border-primary/50 transition-colors"
-                >
-                  <CardHeader>
-                    <CardTitle>{plan.name}</CardTitle>
-                    <p className="text-muted-foreground text-sm">
-                      {plan.tenureYears}-year tenure
-                    </p>
-                  </CardHeader>
-                  <CardContent className="space-y-3 text-sm">
-                    <Row label="Credit rate" value={`₹${plan.creditRatePerUnit.toFixed(2)}/unit`} />
-                    <Row label="Fee" value={`₹${(economics.feePerKW / 1000).toFixed(1)}/W`} />
-                    <Row
-                      label="Refund at end"
-                      value={plan.refundPct > 0 ? `${plan.refundPct}%` : "—"}
-                    />
-                    <Row
-                      label="Target return"
-                      value={`${plan.targetXirrPct.toFixed(1)}%`}
-                    />
-                  </CardContent>
-                </Card>
-              );
+              return {
+                code: plan.code,
+                name: plan.name,
+                tenureYears: plan.tenureYears,
+                creditRatePerUnit: plan.creditRatePerUnit,
+                refundPct: plan.refundPct,
+                targetXirrPct: plan.targetXirrPct,
+                feePerKW: economics.feePerKW,
+              };
             })}
-          </div>
-
-          <div className="mt-12 text-center">
-            <Button
-              size="lg"
-              disabled={project.status === "FULL" || project.status === "CLOSED"}
-              render={<Link href="/signup" />}
-            >
-              {project.status === "FULL"
-                ? "Fully reserved"
-                : `Reserve capacity in ${project.name}`}
-            </Button>
-          </div>
+          />
         </Container>
       </section>
     </>
-  );
-}
-
-function Row({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex items-center justify-between">
-      <span className="text-muted-foreground">{label}</span>
-      <span className="font-medium tabular-nums">{value}</span>
-    </div>
   );
 }

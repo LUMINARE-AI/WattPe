@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" role="img" aria-label="Arin Danish">
+  <defs>
+    <linearGradient id="arin" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1a3333"/>
+      <stop offset="100%" stop-color="#008898"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="500" fill="url(#arin)"/>
+  <circle cx="200" cy="190" r="72" fill="#f7fafc" fill-opacity="0.16"/>
+  <text x="200" y="210" text-anchor="middle" font-family="system-ui, sans-serif" font-size="56" font-weight="650" fill="#f7fafc">AD</text>
+  <text x="200" y="360" text-anchor="middle" font-family="system-ui, sans-serif" font-size="22" font-weight="600" fill="#f7fafc">Arin Danish</text>
+</svg>

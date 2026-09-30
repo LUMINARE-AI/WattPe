@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { PageHero } from "@/components/marketing/page-hero";
 import { Container } from "@/components/shared/container";
 import { SectionHeading } from "@/components/shared/section-heading";
@@ -9,6 +10,8 @@ import { getActiveProjects } from "@/lib/data/projects";
 import { getEngineAssumptions, getFlagshipPlan } from "@/lib/data/pricing";
 import { getSupportedDiscoms } from "@/lib/data/discoms";
 import { Reveal } from "@/components/shared/reveal";
+import { auth } from "@/lib/auth";
+import { hasAdminAccess } from "@/lib/rbac";
 
 export const metadata: Metadata = {
   title: "Projects",
@@ -19,12 +22,14 @@ export const metadata: Metadata = {
 export const revalidate = 3600;
 
 export default async function ProjectsPage() {
-  const [projects, plan, assumptions, discoms] = await Promise.all([
+  const [projects, plan, assumptions, discoms, session] = await Promise.all([
     getActiveProjects(),
     getFlagshipPlan(),
     getEngineAssumptions(),
     getSupportedDiscoms(),
+    auth(),
   ]);
+  const isAdmin = hasAdminAccess(session?.user?.role);
 
   return (
     <>
@@ -41,7 +46,17 @@ export default async function ProjectsPage() {
             className="bg-brand-leaf/10 pointer-events-none absolute top-[-10%] right-[-10%] size-[420px] rounded-full blur-3xl"
           />
           <Container className="relative">
-            <SectionHeading eyebrow="Live now" title="Available projects" />
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <SectionHeading eyebrow="Live now" title="Available projects" />
+              {isAdmin && (
+                <Link
+                  href="/dashboard/user/projects"
+                  className="text-primary shrink-0 text-sm font-semibold"
+                >
+                  Manage projects
+                </Link>
+              )}
+            </div>
             {projects.length > 0 ? (
               <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {projects.map((project) => (

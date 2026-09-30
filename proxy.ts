@@ -15,7 +15,11 @@ export default auth((req) => {
     return NextResponse.redirect(loginUrl);
   }
 
-  if (pathname.startsWith("/admin") && !hasAdminAccess(role)) {
+  const adminOnlyDashboard =
+    pathname.startsWith("/dashboard/user/projects") ||
+    pathname.startsWith("/dashboard/user/users");
+
+  if ((pathname.startsWith("/admin") || adminOnlyDashboard) && !hasAdminAccess(role)) {
     return NextResponse.redirect(new URL("/unauthorized", req.nextUrl.origin));
   }
 

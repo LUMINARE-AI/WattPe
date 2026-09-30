@@ -2,13 +2,19 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Menu, X, ArrowRight } from "lucide-react";
+import { Menu, X, ArrowRight, LayoutDashboard, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/shared/container";
 import { Logo } from "@/components/shared/logo";
 import { MAIN_NAV } from "@/lib/content/nav";
+import { logoutAction } from "@/lib/actions/auth";
+import {
+  NavbarUserMenu,
+  dashboardHref,
+  type NavbarUser,
+} from "@/components/shared/navbar-user-menu";
 
-export function Navbar() {
+export function Navbar({ user }: { user: NavbarUser | null }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -31,22 +37,29 @@ export function Navbar() {
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
-          <Button variant="ghost" render={<Link href="/login" />}>
-            Log in
-          </Button>
+          {user ? (
+            <NavbarUserMenu user={user} />
+          ) : (
+            <Button variant="ghost" render={<Link href="/login" />}>
+              Log in
+            </Button>
+          )}
           <Button render={<Link href="/projects" />}>
             Get Started <ArrowRight className="size-4" />
           </Button>
         </div>
 
-        <button
-          type="button"
-          className="text-foreground hover:bg-muted -mr-2 rounded-md p-2 transition-colors md:hidden"
-          onClick={() => setOpen((v) => !v)}
-          aria-label="Toggle menu"
-        >
-          {open ? <X className="size-6" /> : <Menu className="size-6" />}
-        </button>
+        <div className="flex items-center gap-2 md:hidden">
+          {user ? <NavbarUserMenu user={user} /> : null}
+          <button
+            type="button"
+            className="text-foreground hover:bg-muted -mr-2 rounded-md p-2 transition-colors"
+            onClick={() => setOpen((v) => !v)}
+            aria-label="Toggle menu"
+          >
+            {open ? <X className="size-6" /> : <Menu className="size-6" />}
+          </button>
+        </div>
       </Container>
 
       {open && (
@@ -63,12 +76,35 @@ export function Navbar() {
               </Link>
             ))}
             <div className="mt-3 flex flex-col gap-2 px-3">
-              <Button
-                variant="outline"
-                render={<Link href="/login" onClick={() => setOpen(false)} />}
-              >
-                Log in
-              </Button>
+              {user ? (
+                <>
+                  <Button
+                    variant="outline"
+                    render={
+                      <Link
+                        href={dashboardHref(user.role)}
+                        onClick={() => setOpen(false)}
+                      />
+                    }
+                  >
+                    <LayoutDashboard className="size-4" />
+                    Dashboard
+                  </Button>
+                  <form action={logoutAction}>
+                    <Button type="submit" variant="ghost" className="w-full">
+                      <LogOut className="size-4" />
+                      Log out
+                    </Button>
+                  </form>
+                </>
+              ) : (
+                <Button
+                  variant="outline"
+                  render={<Link href="/login" onClick={() => setOpen(false)} />}
+                >
+                  Log in
+                </Button>
+              )}
               <Button
                 render={
                   <Link href="/projects" onClick={() => setOpen(false)} />

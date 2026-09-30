@@ -1,4 +1,5 @@
 import { auth } from "@/lib/auth";
+import { hasAdminAccess } from "@/lib/rbac";
 import { DashboardSidebar } from "@/components/dashboard/sidebar";
 import { LogoutButton } from "@/components/dashboard/logout-button";
 
@@ -11,7 +12,7 @@ export default async function UserDashboardLayout({
 
   return (
     <div className="bg-background flex min-h-svh">
-      <DashboardSidebar />
+      <DashboardSidebar isAdmin={hasAdminAccess(session?.user?.role)} />
       <div className="flex flex-1 flex-col">
         <header className="border-border/60 bg-card/60 flex items-center justify-between border-b px-6 py-3 backdrop-blur">
           <div className="text-sm">
